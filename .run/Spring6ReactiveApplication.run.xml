@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Spring6ReactiveApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <module name="spring-6-reactive" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="guru.springframework.spring6reactive.Spring6ReactiveApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
