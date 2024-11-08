@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
 import org.springframework.context.annotation.Import;
+import reactor.test.StepVerifier;
 
 import java.math.BigDecimal;
 
@@ -21,13 +22,15 @@ class BeerRepositoryTest {
     @Test
     void testSave() {
         beerRepository.save(createBeer())
-            .subscribe(beer -> { 
+            .as(publisher -> StepVerifier.create(publisher))
+            .assertNext(beer -> {
                 System.out.println(beer.toString());
                 assertEquals("Test Beer", beer.getBeerName());
                 assertEquals(1, beer.getId());
                 assertNotNull(beer.getCreatedDate());
                 assertNotNull(beer.getLastModifiedDate());
-            });
+            })
+            .verifyComplete();
     }
     
     private Beer createBeer() {
