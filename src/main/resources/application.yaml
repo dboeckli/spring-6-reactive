@@ -1,6 +1,15 @@
 spring:
   application:
     name: spring-6-reactive
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  # TODO: console does not show up
+  h2:
+    console:
+      enabled: true
 
 logging:
   level:
