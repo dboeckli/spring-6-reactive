@@ -21,6 +21,19 @@ Content-Type: application/json
     "price": 27.16
 }
 
+### Create Beer returns BAD REQUEST, beerName is to short
+POST http://localhost:8080/api/v2/beer
+Accept: application/json
+Content-Type: application/json
+
+{
+    "beerName": "p",
+    "beerStyle": "LAGER",
+    "upc": "xx",
+    "quantityOnHand": 5,
+    "price": 27.16
+}
+
 ### Update Beer by ID
 PUT http://localhost:8080/api/v2/beer/1
 Accept: application/json
@@ -34,7 +47,20 @@ Content-Type: application/json
     "price": 27.16
 }
 
-### Pause Beer by ID
+### Update Beer by ID returns BAD REQUEST, beerStyle is empty
+PUT http://localhost:8080/api/v2/beer/1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "beerName": "presidenteEdited",
+    "beerStyle": "",
+    "upc": "xx",
+    "quantityOnHand": 5,
+    "price": 27.16
+}
+
+### Patch Beer by ID
 PUT http://localhost:8080/api/v2/beer/1
 Accept: application/json
 Content-Type: application/json
@@ -46,3 +72,19 @@ Content-Type: application/json
     "quantityOnHand": 5,
     "price": 27.16
 }
+
+### Patch Beer by ID. Beername is missing
+PUT http://localhost:8080/api/v2/beer/1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "beerStyle": "LAGER",
+    "upc": "xx",
+    "quantityOnHand": 5,
+    "price": 27.16
+}
+
+### Delete Beer by ID
+DELETE http://localhost:8080/api/v2/beer/1
+Accept: application/json

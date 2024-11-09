@@ -6,7 +6,8 @@ spring:
     driverClassName: org.h2.Driver
     username: sa
     password: password
-  # TODO: console does not show up: http://localhost:8080/h2-console
+  # TODO: console does not show up: http://localhost:8082/h2-console
+  # TODO: console does show up instead: http://localhost:8082/
   h2:
     console:
       enabled: true

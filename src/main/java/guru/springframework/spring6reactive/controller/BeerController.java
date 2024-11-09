@@ -4,6 +4,7 @@ import guru.springframework.spring6reactive.dto.BeerDto;
 import guru.springframework.spring6reactive.service.BeerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
@@ -30,7 +31,7 @@ public class BeerController {
     }
     
     @PostMapping(BEER_PATH)
-    Mono<ResponseEntity<Void>> createBeer(BeerDto beerDto){
+    Mono<ResponseEntity<Void>> createBeer(@Validated @RequestBody BeerDto beerDto){
         return beerService.saveNewBeer(beerDto)
             .map(savedDto -> ResponseEntity.created(UriComponentsBuilder
                     .fromHttpUrl("http://localhost:8080/" + BEER_PATH + "/" + savedDto.getId())
@@ -39,15 +40,25 @@ public class BeerController {
     }
 
     @PutMapping(BEER_PATH_ID)
-    ResponseEntity<Void> updateBeer(@PathVariable("beerId") Integer beerId, @RequestBody BeerDto beerDto) {
-        beerService.updateBeer(beerId, beerDto).subscribe();
-        return ResponseEntity.ok().build();
+    Mono<ResponseEntity<Void>> updateBeer(@PathVariable("beerId") Integer beerId,
+                                          @Validated @RequestBody BeerDto beerDto) {
+        
+        return beerService.updateBeer(beerId, beerDto)
+            .map(savedDto -> ResponseEntity.ok().build());
     }
 
     @PatchMapping(value = BEER_PATH_ID)
-    ResponseEntity<Void> patchBeer(@PathVariable("beerId") Integer beerId, @RequestBody BeerDto beerDto) {
-        beerService.patchBeer(beerId, beerDto).subscribe();
-        return ResponseEntity.ok().build();
+    Mono<ResponseEntity<Void>> patchBeer(@PathVariable("beerId") Integer beerId, 
+                                         @Validated @RequestBody BeerDto beerDto) {
+        
+        return beerService.patchBeer(beerId, beerDto)
+            .map(savedDto -> ResponseEntity.ok().build());
+    }
+    
+    @DeleteMapping(BEER_PATH_ID)
+    Mono<ResponseEntity<Void>> deleteBeer(@PathVariable("beerId") Integer beerId) {
+        return beerService.deleteBeer(beerId)
+            .map(voidResponse -> ResponseEntity.noContent().build());
     }
 
 }
