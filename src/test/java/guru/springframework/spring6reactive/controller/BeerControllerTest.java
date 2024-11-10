@@ -1,11 +1,10 @@
 package guru.springframework.spring6reactive.controller;
 
+import guru.springframework.spring6reactive.bootstrap.BootstrapData;
 import guru.springframework.spring6reactive.dto.BeerDto;
 import guru.springframework.spring6reactive.model.Beer;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import guru.springframework.spring6reactive.repository.BeerRepository;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,10 +21,14 @@ class BeerControllerTest {
     
     @Autowired
     WebTestClient webTestClient;
+    
+    @Autowired
+    BootstrapData bootstrapData;
 
     @Test
     @Order(1)
     void testGetBeerById() {
+      
         webTestClient.get().uri(BeerController.BEER_PATH_ID, 1)
             .exchange()
             .expectStatus().isOk()

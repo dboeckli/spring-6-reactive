@@ -25,14 +25,22 @@ public class BootstrapData implements CommandLineRunner {
     public void run(String... args) {
         loadBeerData();
         loadCustomerData();
+        
+        log.info("Bootstrapping data");
 
         beerRepository.count().subscribe(count -> {
             log.info("Beer data loaded: " + count);
         });
+        beerRepository.findAll().subscribe(beer -> log.info(beer.toString()));
 
         customerRepository.count().subscribe(count -> {
             log.info("Customer data loaded: " + count);
         });
+    }
+    
+    public void deleteData() {
+        beerRepository.deleteAll().block();
+        customerRepository.deleteAll().block();
     }
 
     private void loadCustomerData() {
