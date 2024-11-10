@@ -11,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.transaction.annotation.Transactional;
 
 import static guru.springframework.spring6reactive.helper.BeerHelperUtil.getTestBeer;
 
@@ -19,7 +18,6 @@ import static guru.springframework.spring6reactive.helper.BeerHelperUtil.getTest
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @AutoConfigureWebTestClient
-@Transactional
 class BeerControllerTest {
     
     @Autowired
