@@ -15,7 +15,7 @@ import static guru.springframework.spring6reactive.helper.BeerHelperUtil.getTest
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@DataR2dbcTest
+@DataR2dbcTest(properties = { "spring.datasource.url=jdbc:h2:mem:BeerRepositoryTest;DB_CLOSE_ON_EXIT=TRUE" })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Import({DatabaseConfig.class, BootstrapData.class})
 class BeerRepositoryTest {
