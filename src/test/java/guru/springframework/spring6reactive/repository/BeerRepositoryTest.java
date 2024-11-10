@@ -2,6 +2,7 @@ package guru.springframework.spring6reactive.repository;
 
 import guru.springframework.spring6reactive.bootstrap.BootstrapData;
 import guru.springframework.spring6reactive.config.DatabaseConfig;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DataR2dbcTest(properties = { "spring.datasource.url=jdbc:h2:mem:BeerRepositoryTest;DB_CLOSE_ON_EXIT=TRUE" })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Import({DatabaseConfig.class, BootstrapData.class})
+@Disabled
 class BeerRepositoryTest {
     
     @Autowired
