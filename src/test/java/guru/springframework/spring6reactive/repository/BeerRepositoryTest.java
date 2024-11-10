@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.test.StepVerifier;
 
 import static guru.springframework.spring6reactive.helper.BeerHelperUtil.getTestBeer;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DataR2dbcTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Import(DatabaseConfig.class)
-@Disabled
+@Transactional
 class BeerRepositoryTest {
     
     @Autowired
