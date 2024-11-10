@@ -10,14 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static guru.springframework.spring6reactive.helper.BeerHelperUtil.getTestBeer;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:BeerControllerTest;DB_CLOSE_ON_EXIT=TRUE")
-@TestPropertySource(properties = "spring.datasource.url=jdbc:h2:mem:BeerControllerTest;DB_CLOSE_ON_EXIT=TRUE")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @AutoConfigureWebTestClient
 class BeerControllerTest {
