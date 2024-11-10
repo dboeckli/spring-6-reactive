@@ -36,11 +36,7 @@ public class BootstrapData implements CommandLineRunner {
         customerRepository.count().subscribe(count -> {
             log.info("Customer data loaded: " + count);
         });
-    }
-    
-    public void deleteData() {
-        beerRepository.deleteAll().block();
-        customerRepository.deleteAll().block();
+        customerRepository.findAll().subscribe(customer -> log.info(customer.toString()));
     }
 
     private void loadCustomerData() {

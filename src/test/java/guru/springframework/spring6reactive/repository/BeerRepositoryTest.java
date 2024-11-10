@@ -2,7 +2,6 @@ package guru.springframework.spring6reactive.repository;
 
 import guru.springframework.spring6reactive.bootstrap.BootstrapData;
 import guru.springframework.spring6reactive.config.DatabaseConfig;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
@@ -19,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DataR2dbcTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Import({DatabaseConfig.class, BootstrapData.class})
-//@Disabled // TODO: Disabled until we fix the issue with the database. this is failling in conjunction with the BeerControllerTest
 class BeerRepositoryTest {
     
     @Autowired
@@ -28,14 +26,8 @@ class BeerRepositoryTest {
     @Autowired
     ReactiveTransactionManager reactiveTransactionManager;
     
-    @Autowired
-    BootstrapData bootstrapData;
-
     @Test
     void testSave() {
-        beerRepository.deleteAll().block();
-        bootstrapData.run();
-        
         beerRepository.save(getTestBeer())
             .as(publisher -> StepVerifier.create(publisher))
             .assertNext(beer -> {
