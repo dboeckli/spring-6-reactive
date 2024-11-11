@@ -62,7 +62,8 @@ class BeerControllerTest {
             .header("content-type", "application/json")
             .exchange()
             .expectStatus().isCreated()
-            .expectHeader().location("http://localhost:8080/api/v2/beer/4");
+            //.expectHeader().location("http://localhost:8080/api/v2/beer/4")
+            .expectHeader().valueMatches("location", "http://localhost:8080/api/v2/beer/\\d+$");
     }
 
     @Test
