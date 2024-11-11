@@ -58,7 +58,7 @@ public class BeerController {
     @DeleteMapping(BEER_PATH_ID)
     Mono<ResponseEntity<Void>> deleteBeer(@PathVariable("beerId") Integer beerId) {
         return beerService.deleteBeer(beerId)
-            .map(voidResponse -> ResponseEntity.noContent().build());
+            .thenReturn(ResponseEntity.noContent().build());
     }
 
 }
