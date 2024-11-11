@@ -1,7 +1,7 @@
 package guru.springframework.spring6reactive.controller;
 
-import guru.springframework.spring6reactive.dto.BeerDto;
-import guru.springframework.spring6reactive.model.Beer;
+import guru.springframework.spring6reactive.dto.CustomerDto;
+import guru.springframework.spring6reactive.model.Customer;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -12,64 +12,58 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import static guru.springframework.spring6reactive.helper.TestDataHelperUtil.getTestBeer;
+import static guru.springframework.spring6reactive.helper.TestDataHelperUtil.getTestCustomer;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @AutoConfigureWebTestClient
-class BeerControllerTest {
-    
+class CustomerControllerTest {
+
     @Autowired
     WebTestClient webTestClient;
 
     @Test
     @Order(1)
-    void testGetBeerById() {
-      
-        webTestClient.get().uri(BeerController.BEER_PATH_ID, 1)
+    void testGetCustomerById() {
+        webTestClient.get().uri(CustomerController.CUSTOMER_PATH_ID, 1)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().valueEquals("content-type", "application/json")
             //.expectBody(BeerDto.class).isEqualTo(BeerDto.builder().beerName("Galaxy Cat").build())
             .expectBody()
-                .jsonPath("$.id").isEqualTo(1)
-                .jsonPath("$.beerName").isEqualTo("Galaxy Cat")
-                .jsonPath("$.beerStyle").isEqualTo("Pale Ale")
-                .jsonPath("$.upc").isEqualTo("12356")
-                .jsonPath("$.price").isEqualTo(13.0)  
-                .jsonPath("$.quantityOnHand").isEqualTo(122);
-        
+            .jsonPath("$.id").isEqualTo(1)
+            .jsonPath("$.customerName").isEqualTo("Hans");
     }
 
     @Test
     @Order(2)
-    void testListBeers() {
-        webTestClient.get().uri(BeerController.BEER_PATH)
+    void testListCustomers() {
+        webTestClient.get().uri(CustomerController.CUSTOMER_PATH)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().valueEquals("content-type", "application/json")
             //.expectBody().jsonPath("$.length()").isEqualTo(3)
-            .expectBodyList(BeerDto.class).hasSize(3);
+            .expectBodyList(CustomerDto.class).hasSize(4);
     }
 
     @Test
     @Order(3)
-    void testCreateBeer() {
-        webTestClient.post().uri(BeerController.BEER_PATH)
-            .bodyValue(getTestBeer())
+    void testCreateCustomer() {
+        webTestClient.post().uri(CustomerController.CUSTOMER_PATH)
+            .bodyValue(getTestCustomer())
             .header("content-type", "application/json")
             .exchange()
             .expectStatus().isCreated()
             //.expectHeader().location("http://localhost:8080/api/v2/beer/4")
-            .expectHeader().valueMatches("location", "http://localhost:8080/api/v2/beer/\\d+$");
+            .expectHeader().valueMatches("location", "http://localhost:8080/api/v2/customer/\\d+$");
     }
 
     @Test
     @Order(4)
-    void testCreateBeerNameTooShort() {
-        webTestClient.post().uri(BeerController.BEER_PATH)
-            .bodyValue(BeerDto.builder().beerName("N").build())
+    void testCreateCustomerNameTooShort() {
+        webTestClient.post().uri(CustomerController.CUSTOMER_PATH)
+            .bodyValue(CustomerDto.builder().customerName("N").build())
             .exchange()
             .expectHeader().valueEquals("content-type", "application/json")
             .expectStatus().isBadRequest();
@@ -77,12 +71,12 @@ class BeerControllerTest {
 
     @Test
     @Order(5)
-    void updateBeer() {
-        Beer beerToUpdate = getTestBeer();
-        beerToUpdate.setBeerName("New Name");
-        
-        webTestClient.put().uri(BeerController.BEER_PATH_ID, 1)
-            .bodyValue(beerToUpdate)
+    void testUpdateCustomer() {
+        Customer customerToUpdate = getTestCustomer();
+        customerToUpdate.setCustomerName("Updated Customer Name");
+
+        webTestClient.put().uri(CustomerController.CUSTOMER_PATH_ID, 1)
+            .bodyValue(customerToUpdate)
             .header("content-type", "application/json")
             .exchange()
             .expectStatus().isOk();
@@ -90,12 +84,12 @@ class BeerControllerTest {
 
     @Test
     @Order(6)
-    void testPatchBeer() {
-        Beer beerToPatch = getTestBeer();
-        beerToPatch.setBeerName("New Name");
+    void testPatchCustomer() {
+        Customer customerToPatch = getTestCustomer();
+        customerToPatch.setCustomerName("Patched Customer Name");
 
-        webTestClient.patch().uri(BeerController.BEER_PATH_ID, 1)
-            .bodyValue(beerToPatch)
+        webTestClient.patch().uri(CustomerController.CUSTOMER_PATH_ID, 1)
+            .bodyValue(customerToPatch)
             .header("content-type", "application/json")
             .exchange()
             .expectStatus().isOk();
@@ -103,8 +97,8 @@ class BeerControllerTest {
 
     @Test
     @Order(999)
-    void deleteBeer() {
-        webTestClient.delete().uri(BeerController.BEER_PATH_ID, 1)
+    void testDeleteCustomer() {
+        webTestClient.delete().uri(CustomerController.CUSTOMER_PATH_ID, 1)
             .exchange()
             .expectStatus().isNoContent();
     }

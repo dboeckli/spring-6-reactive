@@ -14,7 +14,7 @@ import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.test.StepVerifier;
 
-import static guru.springframework.spring6reactive.helper.BeerHelperUtil.getTestBeer;
+import static guru.springframework.spring6reactive.helper.TestDataHelperUtil.getTestBeer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
