@@ -3,6 +3,8 @@ package guru.springframework.spring6reactive.repository;
 import guru.springframework.spring6reactive.bootstrap.BootstrapData;
 import guru.springframework.spring6reactive.config.DatabaseConfig;
 import guru.springframework.spring6reactive.model.Beer;
+import lombok.extern.java.Log;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
@@ -16,9 +18,10 @@ import static guru.springframework.spring6reactive.helper.BeerHelperUtil.getTest
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@DataR2dbcTest(properties = { "spring.datasource.url=jdbc:h2:mem:BeerRepositoryTest;DB_CLOSE_ON_EXIT=TRUE" })
+@DataR2dbcTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Import({DatabaseConfig.class, BootstrapData.class})
+@Log
 class BeerRepositoryTest {
     
     @Autowired
@@ -27,7 +30,9 @@ class BeerRepositoryTest {
     @Autowired
     ReactiveTransactionManager reactiveTransactionManager;
     
+    
     @Test
+    @Disabled // disabled because it can influence other tests. Below is the test for rollback
     void testSave() {
         Beer newBeer = getTestBeer();
         newBeer.setBeerName("New Name 1");
@@ -41,6 +46,8 @@ class BeerRepositoryTest {
                 assertNotNull(beer.getLastModifiedDate());
             })
             .verifyComplete();
+
+        beerRepository.findAll().subscribe(beer -> log.info("### testSave: " + beer.toString()));
     }
 
     @Test
@@ -62,6 +69,8 @@ class BeerRepositoryTest {
                 return savedBeer.getBeerName().equals("New Name 2");
             }).verifyComplete();
 
+        beerRepository.findAll().subscribe(beer -> log.info("### testSave2: " + beer.toString()));
+
     }
 
     @Test
@@ -70,8 +79,8 @@ class BeerRepositoryTest {
         newBeer.setBeerName("New Name 3");
         
         StepVerifier.create(TransactionalOperator.create(reactiveTransactionManager)
-            .execute(status -> {
-                status.setRollbackOnly();
+            .execute(reactiveTransaction -> {
+                reactiveTransaction.setRollbackOnly(); // is rollbacked after save
                 return beerRepository.save(newBeer);
             })).assertNext(savedBeer -> {
 
@@ -81,5 +90,7 @@ class BeerRepositoryTest {
             assertNotNull(savedBeer.getLastModifiedDate());
 
         }).verifyComplete();
+
+        beerRepository.findAll().subscribe(beer -> log.info("### testSave3: " + beer.toString()));
     }
 }

@@ -15,7 +15,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import static guru.springframework.spring6reactive.helper.BeerHelperUtil.getTestBeer;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:BeerControllerTest;DB_CLOSE_ON_EXIT=TRUE")
+@SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @AutoConfigureWebTestClient
 class BeerControllerTest {
