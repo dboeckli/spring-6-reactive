@@ -2,7 +2,7 @@ package guru.springframework.spring6reactive.repository;
 
 import guru.springframework.spring6reactive.bootstrap.BootstrapData;
 import guru.springframework.spring6reactive.config.DatabaseConfig;
-import org.junit.jupiter.api.Disabled;
+import guru.springframework.spring6reactive.model.Beer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
@@ -29,11 +29,13 @@ class BeerRepositoryTest {
     
     @Test
     void testSave() {
-        beerRepository.save(getTestBeer())
+        Beer newBeer = getTestBeer();
+        newBeer.setBeerName("New Name 1");
+        
+        beerRepository.save(newBeer)
             .as(publisher -> StepVerifier.create(publisher))
             .assertNext(beer -> {
-                System.out.println(beer.toString());
-                assertEquals("Test Beer", beer.getBeerName());
+                assertEquals("New Name 1", beer.getBeerName());
                 assertNotNull( beer.getId());
                 assertNotNull(beer.getCreatedDate());
                 assertNotNull(beer.getLastModifiedDate());
@@ -43,30 +45,37 @@ class BeerRepositoryTest {
 
     @Test
     void testSave2() {
+        Beer newBeer = getTestBeer();
+        newBeer.setBeerName("New Name 2");
+        
         StepVerifier.create(TransactionalOperator.create(reactiveTransactionManager)
-            .execute(status -> {
-                status.setRollbackOnly();
-                return beerRepository.save(getTestBeer());
+            .execute(reactiveTransaction -> {
+                reactiveTransaction.setRollbackOnly();  // is rollbacked after save
+                return beerRepository.save(newBeer);
             })).expectNextMatches(savedBeer -> {
                 
-                assertEquals("Test Beer", savedBeer.getBeerName());
+                assertEquals("New Name 2", savedBeer.getBeerName());
                 assertNotNull( savedBeer.getId());
                 assertNotNull(savedBeer.getCreatedDate());
                 assertNotNull(savedBeer.getLastModifiedDate());
                 
-                return savedBeer.getBeerName().equals("Test Beer");
+                return savedBeer.getBeerName().equals("New Name 2");
             }).verifyComplete();
+
     }
 
     @Test
     void testSave3() {
+        Beer newBeer = getTestBeer();
+        newBeer.setBeerName("New Name 3");
+        
         StepVerifier.create(TransactionalOperator.create(reactiveTransactionManager)
             .execute(status -> {
                 status.setRollbackOnly();
-                return beerRepository.save(getTestBeer());
+                return beerRepository.save(newBeer);
             })).assertNext(savedBeer -> {
 
-            assertEquals("Test Beer", savedBeer.getBeerName());
+            assertEquals("New Name 3", savedBeer.getBeerName());
             assertNotNull( savedBeer.getId());
             assertNotNull(savedBeer.getCreatedDate());
             assertNotNull(savedBeer.getLastModifiedDate());

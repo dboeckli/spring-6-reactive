@@ -22,7 +22,7 @@ class BeerControllerTest {
     
     @Autowired
     WebTestClient webTestClient;
-    
+
     @Test
     @Order(1)
     void testGetBeerById() {
