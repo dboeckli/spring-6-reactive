@@ -30,10 +30,17 @@ class CustomerControllerTest {
             .exchange()
             .expectStatus().isOk()
             .expectHeader().valueEquals("content-type", "application/json")
-            //.expectBody(BeerDto.class).isEqualTo(BeerDto.builder().beerName("Galaxy Cat").build())
             .expectBody()
             .jsonPath("$.id").isEqualTo(1)
             .jsonPath("$.customerName").isEqualTo("Hans");
+    }
+
+    @Test
+    @Order(1)
+    void testGetCustomerByIdNotFound() {
+        webTestClient.get().uri(CustomerController.CUSTOMER_PATH_ID, 99)
+            .exchange()
+            .expectStatus().isNotFound();
     }
 
     @Test
@@ -55,7 +62,6 @@ class CustomerControllerTest {
             .header("content-type", "application/json")
             .exchange()
             .expectStatus().isCreated()
-            //.expectHeader().location("http://localhost:8080/api/v2/beer/4")
             .expectHeader().valueMatches("location", "http://localhost:8080/api/v2/customer/\\d+$");
     }
 
@@ -83,6 +89,32 @@ class CustomerControllerTest {
     }
 
     @Test
+    @Order(5)
+    void testUpdateCustomerNotFound() {
+        Customer customerToUpdate = getTestCustomer();
+        customerToUpdate.setCustomerName("New Name");
+
+        webTestClient.put().uri(CustomerController.CUSTOMER_PATH_ID, 888)
+            .bodyValue(customerToUpdate)
+            .header("content-type", "application/json")
+            .exchange()
+            .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(4)
+    void testUpdateCustomerNameToShort() {
+        Customer customerToPatch = getTestCustomer();
+        customerToPatch.setCustomerName("N");
+
+        webTestClient.put().uri(CustomerController.CUSTOMER_PATH_ID, 1)
+            .bodyValue(customerToPatch)
+            .header("content-type", "application/json")
+            .exchange()
+            .expectStatus().isBadRequest();
+    }
+
+    @Test
     @Order(6)
     void testPatchCustomer() {
         Customer customerToPatch = getTestCustomer();
@@ -96,10 +128,46 @@ class CustomerControllerTest {
     }
 
     @Test
+    @Order(6)
+    void testPatchCustomerNotFound() {
+        Customer customerToPatch = getTestCustomer();
+        customerToPatch.setCustomerName("New Name");
+
+        webTestClient.patch().uri(CustomerController.CUSTOMER_PATH_ID, 777)
+            .bodyValue(customerToPatch)
+            .header("content-type", "application/json")
+            .exchange()
+            .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(6)
+    void testPatchCustomerNameTooShort() {
+        Customer customerToPatch = getTestCustomer();
+        customerToPatch.setCustomerName("N");
+
+        webTestClient.patch().uri(CustomerController.CUSTOMER_PATH_ID, 777)
+            .bodyValue(customerToPatch)
+            .header("content-type", "application/json")
+            .exchange()
+            .expectStatus().isBadRequest();
+    }
+
+
+
+    @Test
     @Order(999)
     void testDeleteCustomer() {
         webTestClient.delete().uri(CustomerController.CUSTOMER_PATH_ID, 1)
             .exchange()
             .expectStatus().isNoContent();
+    }
+
+    @Test
+    @Order(999)
+    void deleteCustomerNotFound() {
+        webTestClient.delete().uri(CustomerController.CUSTOMER_PATH_ID, 999)
+            .exchange()
+            .expectStatus().isNotFound();
     }
 }

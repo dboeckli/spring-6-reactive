@@ -167,6 +167,19 @@ class BeerControllerTest {
     }
 
     @Test
+    @Order(6)
+    void testPatchBeerNameTooShort() {
+        Beer beerToPatch = getTestBeer();
+        beerToPatch.setBeerName("N");
+
+        webTestClient.patch().uri(BeerController.BEER_PATH_ID, 1)
+            .bodyValue(beerToPatch)
+            .header("content-type", "application/json")
+            .exchange()
+            .expectStatus().isBadRequest();
+    }
+
+    @Test
     @Order(999)
     void deleteBeer() {
         webTestClient.delete().uri(BeerController.BEER_PATH_ID, 1)
