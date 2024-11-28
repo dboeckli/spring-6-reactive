@@ -1,9 +1,11 @@
 package guru.springframework.spring6reactive.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 
 @Configuration
+@Profile("!test")
 public class H2ConsoleConfiguration {
 
     private org.h2.tools.Server webServer;

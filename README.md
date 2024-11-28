@@ -1,10 +1,15 @@
 # Spring 6 Reactive
-This repository contains code examples for my course Spring Framework 6: Beginner to Guru.
+Welcome to the "Spring Framework 6: Beginner to Guru" project! This project is designed to help you explore and understand the latest features of Spring Framework 6 through practical code examples. 
+Here's a quick guide to get you started and contributing:
 
-## Spring Framework 6: Beginner to Guru Course Wiki
-Got a question about your Spring Framework 6 course? [Checkout these FAQs!](https://github.com/springframeworkguru/spring5webapp/wiki)
+## Getting Started:
+Server runs on port 8080. Requires the auth server running on port 9000.
 
-## Getting Your Development Environment Setup
+## Project Structure:
+`pom.xml`: This is your main Maven configuration file. It manages dependencies, plugins, and build settings.
+`src` Directory: Contains your main Java source code and resources, as well as test code.
+`restRequests` Directory: Houses resources for REST requests, including authentication HTTP requests and HTTP client configurations.
+
 ### Recommended Versions
 | Recommended             | Reference                                                                                                                                                     | Notes                                                                                                                                                                                                                  |
 |-------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
