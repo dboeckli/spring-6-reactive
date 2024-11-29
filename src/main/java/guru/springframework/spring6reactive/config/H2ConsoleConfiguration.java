@@ -12,8 +12,8 @@ public class H2ConsoleConfiguration {
 
     private org.h2.tools.Server tcpServer;
 
-    private static final String WEB_PORT = "8082";
-    private static final String TCP_PORT = "9092";
+    private static final String WEB_PORT = "8088";
+    private static final String TCP_PORT = "9098";
 
     @EventListener(org.springframework.context.event.ContextRefreshedEvent.class)
     public void start() throws java.sql.SQLException {

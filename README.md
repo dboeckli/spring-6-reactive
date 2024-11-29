@@ -3,7 +3,7 @@ Welcome to the "Spring Framework 6: Beginner to Guru" project! This project is d
 Here's a quick guide to get you started and contributing:
 
 ## Getting Started:
-Server runs on port 8080. Requires the auth server running on port 9000.
+Server runs on port 8082. Requires the auth server running on port 9000.
 
 ## Project Structure:
 `pom.xml`: This is your main Maven configuration file. It manages dependencies, plugins, and build settings.
