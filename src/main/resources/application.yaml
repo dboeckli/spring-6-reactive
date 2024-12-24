@@ -44,3 +44,18 @@ logging:
     org.springframework.r2dbc: DEBUG
     org.zalando.logbook: TRACE     
     
+logbook:
+  filter:
+    enabled: true
+  format:
+    style: http
+  obfuscate:
+    headers:
+      - Authorization
+      - X-Secret
+    parameters:
+      - access_token
+      - password
+  predicate:
+    exclude:
+      - path: /actuator/health    
