@@ -4,6 +4,7 @@ Here's a quick guide to get you started and contributing:
 
 ## Getting Started:
 Server runs on port 8082. Requires the auth server running on port 9000.
+The IntelliJ Project runner is starting both server at one (via docker-compose file).
 
 ## Project Structure:
 `pom.xml`: This is your main Maven configuration file. It manages dependencies, plugins, and build settings.
