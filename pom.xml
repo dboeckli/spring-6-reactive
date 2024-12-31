@@ -88,7 +88,7 @@
         <repository>
             <id>github</id>
             <name>GitHub dboeckli Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/dboeckli/${project.artifactId}</url>
+            <url>https://maven.pkg.github.com/${organization.name}/${project.artifactId}</url>
         </repository>
     </distributionManagement>
     
@@ -113,6 +113,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-docker-compose</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        
         <dependency>
             <groupId>org.zalando</groupId>
             <artifactId>logbook-spring-boot-starter</artifactId>
