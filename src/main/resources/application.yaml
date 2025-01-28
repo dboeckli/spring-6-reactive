@@ -63,4 +63,7 @@ logbook:
       - password
   predicate:
     exclude:
-      - path: /actuator/health    
+      - path: /actuator/health
+
+springdoc:
+  show-actuator: false
