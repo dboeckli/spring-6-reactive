@@ -1,4 +1,4 @@
-### api docs for rest-mvc
+### api docs 
 GET http://localhost:8082/v3/api-docs
 Accept: application/json
 Content-Type: application/json

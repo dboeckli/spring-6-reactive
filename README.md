@@ -11,6 +11,12 @@ The IntelliJ Project runner is starting both server at one (via docker-compose f
 `src` Directory: Contains your main Java source code and resources, as well as test code.
 `restRequests` Directory: Houses resources for REST requests, including authentication HTTP requests and HTTP client configurations.
 
+## Urls
+
+openapi api-docs: http://localhost:8082/v3/api-docs
+openapi gui: http://localhost:8082/swagger-ui/index.html
+openapi-yaml: http://localhost:8082/v3/api-docs.yaml
+
 ## Docker
 
 ### create image
