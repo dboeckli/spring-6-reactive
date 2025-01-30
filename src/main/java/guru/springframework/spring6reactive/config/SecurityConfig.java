@@ -35,11 +35,13 @@ public class SecurityConfig {
 
     @Bean
     @Order(2)
-    SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+    SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, CorsConfigurationSource corsConfigurationSource) {
         http
             .csrf(ServerHttpSecurity.CsrfSpec::disable)
+            .cors(cors -> cors.configurationSource(corsConfigurationSource))
             .authorizeExchange(authorizeExchange -> authorizeExchange
                 .pathMatchers(
+                    "/favicon.ico",
                     "/v3/api-docs",
                     "/v3/api-docs.yaml",
                     "/v3/api-docs/**", 
