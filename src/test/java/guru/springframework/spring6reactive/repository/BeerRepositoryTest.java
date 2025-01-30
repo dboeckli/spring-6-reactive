@@ -4,8 +4,7 @@ import guru.springframework.spring6reactive.bootstrap.BootstrapData;
 import guru.springframework.spring6reactive.config.DatabaseConfig;
 import guru.springframework.spring6reactive.model.Beer;
 import lombok.extern.java.Log;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
 import org.springframework.context.annotation.Import;
@@ -23,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Import({DatabaseConfig.class, BootstrapData.class})
 @Log
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles(value = "test")
 class BeerRepositoryTest {
     
@@ -34,13 +34,13 @@ class BeerRepositoryTest {
     
     
     @Test
-    @Disabled // disabled because it can influence other tests. Below is the test for rollback
+    @Order(3)
     void testSave() {
         Beer newBeer = getTestBeer();
         newBeer.setBeerName("New Name 1");
         
         beerRepository.save(newBeer)
-            .as(publisher -> StepVerifier.create(publisher))
+            .as(StepVerifier::create)
             .assertNext(beer -> {
                 assertEquals("New Name 1", beer.getBeerName());
                 assertNotNull( beer.getId());
@@ -53,6 +53,7 @@ class BeerRepositoryTest {
     }
 
     @Test
+    @Order(1)
     void testSave2() {
         Beer newBeer = getTestBeer();
         newBeer.setBeerName("New Name 2");
@@ -76,6 +77,7 @@ class BeerRepositoryTest {
     }
 
     @Test
+    @Order(2)
     void testSave3() {
         Beer newBeer = getTestBeer();
         newBeer.setBeerName("New Name 3");
