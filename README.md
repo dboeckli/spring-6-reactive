@@ -13,9 +13,9 @@ The IntelliJ Project runner is starting both server at one (via docker-compose f
 
 ## Urls
 
-openapi api-docs: http://localhost:8082/v3/api-docs
-openapi gui: http://localhost:8082/swagger-ui/index.html
-openapi-yaml: http://localhost:8082/v3/api-docs.yaml
+- openapi api-docs: http://localhost:8082/v3/api-docs
+- openapi gui: http://localhost:8082/swagger-ui/index.html
+- openapi-yaml: http://localhost:8082/v3/api-docs.yaml
 
 ## Docker
 
