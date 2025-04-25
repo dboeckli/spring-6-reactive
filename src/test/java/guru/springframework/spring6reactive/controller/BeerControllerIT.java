@@ -2,10 +2,8 @@ package guru.springframework.spring6reactive.controller;
 
 import guru.springframework.spring6reactive.dto.BeerDto;
 import guru.springframework.spring6reactive.model.Beer;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +11,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 import static guru.springframework.spring6reactive.helper.TestDataHelperUtil.getTestBeer;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockOAuth2Login;
@@ -22,7 +22,8 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @AutoConfigureWebTestClient
 @ActiveProfiles(value = "test")
-class BeerControllerTest {
+@Slf4j
+class BeerControllerIT {
     
     @Autowired
     WebTestClient webTestClient;
@@ -61,14 +62,19 @@ class BeerControllerTest {
     @Test
     @Order(2)
     void testListBeers() {
-        webTestClient
+        List<BeerDto> beerList = webTestClient
             .mutateWith(mockOAuth2Login())
             .get().uri(BeerController.BEER_PATH)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().valueEquals("content-type", "application/json")
             //.expectBody().jsonPath("$.length()").isEqualTo(3)
-            .expectBodyList(BeerDto.class).hasSize(3);
+            .expectBodyList(BeerDto.class).hasSize(3)
+            .returnResult().getResponseBody();
+
+        Assertions.assertNotNull(beerList);
+        beerList.forEach(beer -> log.info("#### Beer: " + beer));
+        
     }
 
     @Test

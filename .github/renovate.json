@@ -5,8 +5,19 @@
     "config:recommended"
   ],
   "enabledManagers": [
-    "docker-compose"
+    "docker-compose",
+    "maven-wrapper"
   ],
+
+  "maven-wrapper": {
+    "fileMatch": [
+      "(^|/)mvnw$",
+      "(^|/)mvnw.cmd$",
+      "(^|/).mvn/wrapper/maven-wrapper.properties$"
+    ],
+    "versioning": "maven"
+  },
+
   "docker-compose": {
     "enabled": true
   },
@@ -24,9 +35,6 @@
       "versioning": "maven",
       "allowedVersions": "/^[0-9]+\\.[0-9]+\\.[0-9]+(-SNAPSHOT)?$/",
       "ignoreUnstable": false,
-      "separateMinorPatch": true,
-      "separateMajorMinor": true,
-      "separatePatchReleases": true,
       "automerge": false,
       "automergeType": "pr",
       "ignoreTests": true
