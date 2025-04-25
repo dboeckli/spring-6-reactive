@@ -272,6 +272,7 @@
                         <exclude>**/settings.xml</exclude>
                         <exclude>.run/**</exclude>
                         <exclude>**/banner.txt</exclude>
+                        <exclude>mvnw*</exclude>
                     </excludes>
                 </configuration>
             </plugin>
