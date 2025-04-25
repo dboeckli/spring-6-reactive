@@ -73,9 +73,7 @@ class BeerControllerIT {
             .returnResult().getResponseBody();
 
         Assertions.assertNotNull(beerList);
-        beerList.forEach(beer -> {
-            log.info("Beer: " + beer);
-        });
+        beerList.forEach(beer -> log.info("#### Beer: " + beer));
         
     }
 

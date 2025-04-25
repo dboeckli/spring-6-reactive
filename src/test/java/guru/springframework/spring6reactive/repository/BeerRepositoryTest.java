@@ -3,25 +3,25 @@ package guru.springframework.spring6reactive.repository;
 import guru.springframework.spring6reactive.bootstrap.BootstrapData;
 import guru.springframework.spring6reactive.config.DatabaseConfig;
 import guru.springframework.spring6reactive.model.Beer;
-import lombok.extern.java.Log;
-import org.junit.jupiter.api.*;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.test.StepVerifier;
 
 import static guru.springframework.spring6reactive.helper.TestDataHelperUtil.getTestBeer;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataR2dbcTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Import({DatabaseConfig.class, BootstrapData.class})
-@Log
+@Slf4j
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles(value = "test")
 class BeerRepositoryTest {
@@ -80,6 +80,7 @@ class BeerRepositoryTest {
 
     @Test
     @Order(3)
+    // In this test, the transaction is not rolled back, so the beer is persisted...
     void testSave() {
         Beer newBeer = getTestBeer();
         newBeer.setBeerName("New Name 1");
@@ -95,5 +96,18 @@ class BeerRepositoryTest {
             .verifyComplete();
 
         beerRepository.findAll().subscribe(beer -> log.info("### testSave: " + beer.toString()));
+    }
+    
+    @Test
+    @Order(4)
+    /* 
+    ...this test is related to the above test (testSave). we need to delete the beer because the created beer has not been rolled back. 
+    no rollback happens here neither 
+    */
+    void testDelete() {
+        assertNotNull(beerRepository.findByBeerName("New Name 1").block());
+        StepVerifier.create(beerRepository.deleteByBeerName("New Name 1"))
+            .verifyComplete();
+        assertNull(beerRepository.findByBeerName("New Name 1").block());
     }
 }
