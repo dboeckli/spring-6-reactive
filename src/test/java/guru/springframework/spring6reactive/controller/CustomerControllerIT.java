@@ -21,7 +21,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @AutoConfigureWebTestClient
 @ActiveProfiles(value = "test")
-class CustomerControllerTest {
+class CustomerControllerIT {
 
     @Autowired
     WebTestClient webTestClient;

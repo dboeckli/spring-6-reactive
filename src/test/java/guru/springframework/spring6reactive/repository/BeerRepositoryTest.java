@@ -32,26 +32,6 @@ class BeerRepositoryTest {
     @Autowired
     ReactiveTransactionManager reactiveTransactionManager;
     
-    
-    @Test
-    @Order(3)
-    void testSave() {
-        Beer newBeer = getTestBeer();
-        newBeer.setBeerName("New Name 1");
-        
-        beerRepository.save(newBeer)
-            .as(StepVerifier::create)
-            .assertNext(beer -> {
-                assertEquals("New Name 1", beer.getBeerName());
-                assertNotNull( beer.getId());
-                assertNotNull(beer.getCreatedDate());
-                assertNotNull(beer.getLastModifiedDate());
-            })
-            .verifyComplete();
-
-        beerRepository.findAll().subscribe(beer -> log.info("### testSave: " + beer.toString()));
-    }
-
     @Test
     @Order(1)
     void testSave2() {
@@ -96,5 +76,24 @@ class BeerRepositoryTest {
         }).verifyComplete();
 
         beerRepository.findAll().subscribe(beer -> log.info("### testSave3: " + beer.toString()));
+    }
+
+    @Test
+    @Order(3)
+    void testSave() {
+        Beer newBeer = getTestBeer();
+        newBeer.setBeerName("New Name 1");
+
+        beerRepository.save(newBeer)
+            .as(StepVerifier::create)
+            .assertNext(beer -> {
+                assertEquals("New Name 1", beer.getBeerName());
+                assertNotNull( beer.getId());
+                assertNotNull(beer.getCreatedDate());
+                assertNotNull(beer.getLastModifiedDate());
+            })
+            .verifyComplete();
+
+        beerRepository.findAll().subscribe(beer -> log.info("### testSave: " + beer.toString()));
     }
 }

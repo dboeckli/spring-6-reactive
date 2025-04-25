@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @ActiveProfiles(value = "test")
 @Slf4j
-class Spring6ReactiveApplicationTests {
+class Spring6ReactiveApplicationTest {
 
     @Test
     void contextLoads() {
