@@ -17,6 +17,84 @@ The IntelliJ Project runner is starting both server at one (via docker-compose f
 - openapi gui: http://localhost:8082/swagger-ui/index.html
 - openapi-yaml: http://localhost:8082/v3/api-docs.yaml
 
+## Kubernetes
+
+To run maven filtering for destination target/k8s and target target/helm run:
+```bash
+mvn clean install -DskipTests 
+```
+
+### Deployment with Kubernetes
+
+Deployment goes into the default namespace.
+
+To deploy all resources:
+```bash
+kubectl apply -f target/k8s/
+```
+
+To remove all resources:
+```bash
+kubectl delete -f target/k8s/
+```
+
+Check
+```bash
+kubectl get deployments -o wide
+kubectl get pods -o wide
+```
+
+You can use the actuator rest call to verify via port 30082
+
+### Deployment with Helm
+
+Be aware that we are using a different namespace here (not default).
+
+Go to the directory where the tgz file has been created after 'mvn install'
+```powershell
+cd target/helm/repo
+```
+
+unpack
+```powershell
+$file = Get-ChildItem -Filter spring-6-reactive-v*.tgz | Select-Object -First 1
+tar -xvf $file.Name
+```
+
+install
+```powershell
+$APPLICATION_NAME = Get-ChildItem -Directory | Where-Object { $_.LastWriteTime -ge $file.LastWriteTime } | Select-Object -ExpandProperty Name
+helm upgrade --install $APPLICATION_NAME ./$APPLICATION_NAME --namespace spring-6-reactive --create-namespace --wait --timeout 5m --debug
+```
+
+show logs and show event
+```powershell
+kubectl get pods -n spring-6-reactive
+```
+replace $POD with pods from the command above
+```powershell
+kubectl logs $POD -n spring-6-reactive --all-containers
+```
+
+Show Details and Event
+
+$POD_NAME can be: spring-6-reactive-mongodb, spring-6-reactive
+```powershell
+kubectl describe pod $POD_NAME -n spring-6-reactive
+```
+
+Show Endpoints
+```powershell
+kubectl get endpoints -n spring-6-reactive
+```
+
+uninstall
+```powershell
+helm uninstall $APPLICATION_NAME --namespace spring-6-reactive
+```
+
+You can use the actuator rest call to verify via port 30082
+
 ## Docker
 
 ### create image
