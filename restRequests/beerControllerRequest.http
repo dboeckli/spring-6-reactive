@@ -1,19 +1,19 @@
 ### List Beers
-GET http://localhost:8082/api/v2/beer
+GET http://localhost:{{application-port}}/api/v2/beer
 Accept: application/json
 Content-Type: application/json
-Authorization: Bearer eyJraWQiOiI2MmE1ZWFhYy02YTRhLTQ1NDEtYjllNy1lMDg0Njg3OWM2ZTIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtZXNzYWdpbmctY2xpZW50IiwiYXVkIjoibWVzc2FnaW5nLWNsaWVudCIsIm5iZiI6MTczNTY0MjI3NCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo5MDAwIiwiZXhwIjoxNzM1NjQyODc0LCJpYXQiOjE3MzU2NDIyNzQsImp0aSI6IjVjZWM4Nzk1LTE3OGItNDgxOC1iNzA1LWJhMzY3MDBmMmVhYSJ9.Xn7mOv4WIydiK_x_nR0j6o5nIsOG0gqhEt0YqeybEvQTGCNuo4KEaWsnzudqORDf7jLn_pAeb-85k6wbl6n5XcDrnWXrRN_Wbi3X8VDJSolQqMRQB0NsRPR3MhdBWJJyU8zuiQ_KdhFqBxK7lFdFwXd9gssje2hAt0Mc0YpaMVrEBKiXRtDbpCm9iTBzJSCMRR84cM3c_3qXmsQ4eSqGFFRrGCmEwwTalWYPyOXMjUZJ9_AIrSGO8Y6jxS_-duRZdZX2xoObw3mCkDD0Btl4VNqfT2OKS9dmXGRisutNSwMz-ylKTIIbJN13DvDd5JSPzMcJg95hPgLfmUkGF9FPsA
+Authorization: Bearer {{$auth.token("auth-id")}}
 
 ### Get Beer by ID
-GET http://localhost:8082/api/v2/beer/1
+GET http://localhost:{{application-port}}/api/v2/beer/1
 Accept: application/json
 Content-Type: application/json
-Authorization: Bearer eyJraWQiOiIyMjVmMDU0My1kMDJlLTQzMDMtOTE3MC05MGM0NDcyMTkxMmYiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtZXNzYWdpbmctY2xpZW50IiwiYXVkIjoibWVzc2FnaW5nLWNsaWVudCIsIm5iZiI6MTczMjc3NzcyMCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo5MDAwIiwiZXhwIjoxNzMyNzc4MDIwLCJpYXQiOjE3MzI3Nzc3MjAsImp0aSI6IjU5ZjI4ZGFiLTBhZWUtNDM4MS1hNTZiLTdhMzAzOTY1MDFmMSJ9.T40SgTxO2avVoSVAGNaUdWY30YRdbkkvMJKpD-sTtKkwKVS1VoH5F6Dvx12UN1CWjalgC1cOsX9K4wgHV4fV3FCslKaH-MG1pXhkTQx8F9NH7x2_EiyB9AMpU4J3BZQibLoIKvVh--3D39ZMTNJ8x94LvKytjqlML78XavVU1S0tuQPrelQb0RLjkySyLEteyPoL0aYlfT9M7qA6pIR-PH2Du50ZHoWnF-7dWU1zYlYuTQbGSvNh1cksVCeSFexq5Xk7uZpWUS9jaXgK7bLhzBppYKDjNdChq7KQL8TKXXnOe1N2YWmyQyFkWJZZNGCdTfJC_UdhOPAsj-P8RaE8Qw
+Authorization: Bearer {{$auth.token("auth-id")}}
 
 ### Create Beer
-POST http://localhost:8082/api/v2/beer
+POST http://localhost:{{application-port}}/api/v2/beer
 Accept: application/json
-Authorization: Bearer eyJraWQiOiIyMjVmMDU0My1kMDJlLTQzMDMtOTE3MC05MGM0NDcyMTkxMmYiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtZXNzYWdpbmctY2xpZW50IiwiYXVkIjoibWVzc2FnaW5nLWNsaWVudCIsIm5iZiI6MTczMjc3NzcyMCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo5MDAwIiwiZXhwIjoxNzMyNzc4MDIwLCJpYXQiOjE3MzI3Nzc3MjAsImp0aSI6IjU5ZjI4ZGFiLTBhZWUtNDM4MS1hNTZiLTdhMzAzOTY1MDFmMSJ9.T40SgTxO2avVoSVAGNaUdWY30YRdbkkvMJKpD-sTtKkwKVS1VoH5F6Dvx12UN1CWjalgC1cOsX9K4wgHV4fV3FCslKaH-MG1pXhkTQx8F9NH7x2_EiyB9AMpU4J3BZQibLoIKvVh--3D39ZMTNJ8x94LvKytjqlML78XavVU1S0tuQPrelQb0RLjkySyLEteyPoL0aYlfT9M7qA6pIR-PH2Du50ZHoWnF-7dWU1zYlYuTQbGSvNh1cksVCeSFexq5Xk7uZpWUS9jaXgK7bLhzBppYKDjNdChq7KQL8TKXXnOe1N2YWmyQyFkWJZZNGCdTfJC_UdhOPAsj-P8RaE8Qw
+Authorization: Bearer {{$auth.token("auth-id")}}
 Content-Type: application/json
 
 {
@@ -25,9 +25,9 @@ Content-Type: application/json
 }
 
 ### Create Beer returns BAD REQUEST, beerName is to short
-POST http://localhost:8082/api/v2/beer
+POST http://localhost:{{application-port}}/api/v2/beer
 Accept: application/json
-Authorization: Bearer eyJraWQiOiIyMjVmMDU0My1kMDJlLTQzMDMtOTE3MC05MGM0NDcyMTkxMmYiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtZXNzYWdpbmctY2xpZW50IiwiYXVkIjoibWVzc2FnaW5nLWNsaWVudCIsIm5iZiI6MTczMjc3NzcyMCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo5MDAwIiwiZXhwIjoxNzMyNzc4MDIwLCJpYXQiOjE3MzI3Nzc3MjAsImp0aSI6IjU5ZjI4ZGFiLTBhZWUtNDM4MS1hNTZiLTdhMzAzOTY1MDFmMSJ9.T40SgTxO2avVoSVAGNaUdWY30YRdbkkvMJKpD-sTtKkwKVS1VoH5F6Dvx12UN1CWjalgC1cOsX9K4wgHV4fV3FCslKaH-MG1pXhkTQx8F9NH7x2_EiyB9AMpU4J3BZQibLoIKvVh--3D39ZMTNJ8x94LvKytjqlML78XavVU1S0tuQPrelQb0RLjkySyLEteyPoL0aYlfT9M7qA6pIR-PH2Du50ZHoWnF-7dWU1zYlYuTQbGSvNh1cksVCeSFexq5Xk7uZpWUS9jaXgK7bLhzBppYKDjNdChq7KQL8TKXXnOe1N2YWmyQyFkWJZZNGCdTfJC_UdhOPAsj-P8RaE8Qw
+Authorization: Bearer {{$auth.token("auth-id")}}
 Content-Type: application/json
 
 {
@@ -39,9 +39,9 @@ Content-Type: application/json
 }
 
 ### Update Beer by ID
-PUT http://localhost:8082/api/v2/beer/1
+PUT http://localhost:{{application-port}}/api/v2/beer/1
 Accept: application/json
-Authorization: Bearer eyJraWQiOiIyMjVmMDU0My1kMDJlLTQzMDMtOTE3MC05MGM0NDcyMTkxMmYiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtZXNzYWdpbmctY2xpZW50IiwiYXVkIjoibWVzc2FnaW5nLWNsaWVudCIsIm5iZiI6MTczMjc3NzcyMCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo5MDAwIiwiZXhwIjoxNzMyNzc4MDIwLCJpYXQiOjE3MzI3Nzc3MjAsImp0aSI6IjU5ZjI4ZGFiLTBhZWUtNDM4MS1hNTZiLTdhMzAzOTY1MDFmMSJ9.T40SgTxO2avVoSVAGNaUdWY30YRdbkkvMJKpD-sTtKkwKVS1VoH5F6Dvx12UN1CWjalgC1cOsX9K4wgHV4fV3FCslKaH-MG1pXhkTQx8F9NH7x2_EiyB9AMpU4J3BZQibLoIKvVh--3D39ZMTNJ8x94LvKytjqlML78XavVU1S0tuQPrelQb0RLjkySyLEteyPoL0aYlfT9M7qA6pIR-PH2Du50ZHoWnF-7dWU1zYlYuTQbGSvNh1cksVCeSFexq5Xk7uZpWUS9jaXgK7bLhzBppYKDjNdChq7KQL8TKXXnOe1N2YWmyQyFkWJZZNGCdTfJC_UdhOPAsj-P8RaE8Qw
+Authorization: Bearer {{$auth.token("auth-id")}}
 Content-Type: application/json
 
 {
@@ -53,9 +53,9 @@ Content-Type: application/json
 }
 
 ### Update Beer by ID returns BAD REQUEST, beerStyle is empty
-PUT http://localhost:8082/api/v2/beer/1
+PUT http://localhost:{{application-port}}/api/v2/beer/1
 Accept: application/json
-Authorization: Bearer eyJraWQiOiIyMjVmMDU0My1kMDJlLTQzMDMtOTE3MC05MGM0NDcyMTkxMmYiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtZXNzYWdpbmctY2xpZW50IiwiYXVkIjoibWVzc2FnaW5nLWNsaWVudCIsIm5iZiI6MTczMjc3NzcyMCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo5MDAwIiwiZXhwIjoxNzMyNzc4MDIwLCJpYXQiOjE3MzI3Nzc3MjAsImp0aSI6IjU5ZjI4ZGFiLTBhZWUtNDM4MS1hNTZiLTdhMzAzOTY1MDFmMSJ9.T40SgTxO2avVoSVAGNaUdWY30YRdbkkvMJKpD-sTtKkwKVS1VoH5F6Dvx12UN1CWjalgC1cOsX9K4wgHV4fV3FCslKaH-MG1pXhkTQx8F9NH7x2_EiyB9AMpU4J3BZQibLoIKvVh--3D39ZMTNJ8x94LvKytjqlML78XavVU1S0tuQPrelQb0RLjkySyLEteyPoL0aYlfT9M7qA6pIR-PH2Du50ZHoWnF-7dWU1zYlYuTQbGSvNh1cksVCeSFexq5Xk7uZpWUS9jaXgK7bLhzBppYKDjNdChq7KQL8TKXXnOe1N2YWmyQyFkWJZZNGCdTfJC_UdhOPAsj-P8RaE8Qw
+Authorization: Bearer {{$auth.token("auth-id")}}
 Content-Type: application/json
 
 {
@@ -67,9 +67,9 @@ Content-Type: application/json
 }
 
 ### Patch Beer by ID
-PUT http://localhost:8082/api/v2/beer/1
+PUT http://localhost:{{application-port}}/api/v2/beer/1
 Accept: application/json
-Authorization: Bearer eyJraWQiOiIyMjVmMDU0My1kMDJlLTQzMDMtOTE3MC05MGM0NDcyMTkxMmYiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtZXNzYWdpbmctY2xpZW50IiwiYXVkIjoibWVzc2FnaW5nLWNsaWVudCIsIm5iZiI6MTczMjc3NzcyMCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo5MDAwIiwiZXhwIjoxNzMyNzc4MDIwLCJpYXQiOjE3MzI3Nzc3MjAsImp0aSI6IjU5ZjI4ZGFiLTBhZWUtNDM4MS1hNTZiLTdhMzAzOTY1MDFmMSJ9.T40SgTxO2avVoSVAGNaUdWY30YRdbkkvMJKpD-sTtKkwKVS1VoH5F6Dvx12UN1CWjalgC1cOsX9K4wgHV4fV3FCslKaH-MG1pXhkTQx8F9NH7x2_EiyB9AMpU4J3BZQibLoIKvVh--3D39ZMTNJ8x94LvKytjqlML78XavVU1S0tuQPrelQb0RLjkySyLEteyPoL0aYlfT9M7qA6pIR-PH2Du50ZHoWnF-7dWU1zYlYuTQbGSvNh1cksVCeSFexq5Xk7uZpWUS9jaXgK7bLhzBppYKDjNdChq7KQL8TKXXnOe1N2YWmyQyFkWJZZNGCdTfJC_UdhOPAsj-P8RaE8Qw
+Authorization: Bearer {{$auth.token("auth-id")}}
 Content-Type: application/json
 
 {
@@ -81,9 +81,9 @@ Content-Type: application/json
 }
 
 ### Patch Beer by ID. Beername is missing
-PUT http://localhost:8082/api/v2/beer/1
+PUT http://localhost:{{application-port}}/api/v2/beer/1
 Accept: application/json
-Authorization: Bearer eyJraWQiOiIyMjVmMDU0My1kMDJlLTQzMDMtOTE3MC05MGM0NDcyMTkxMmYiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtZXNzYWdpbmctY2xpZW50IiwiYXVkIjoibWVzc2FnaW5nLWNsaWVudCIsIm5iZiI6MTczMjc3NzcyMCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo5MDAwIiwiZXhwIjoxNzMyNzc4MDIwLCJpYXQiOjE3MzI3Nzc3MjAsImp0aSI6IjU5ZjI4ZGFiLTBhZWUtNDM4MS1hNTZiLTdhMzAzOTY1MDFmMSJ9.T40SgTxO2avVoSVAGNaUdWY30YRdbkkvMJKpD-sTtKkwKVS1VoH5F6Dvx12UN1CWjalgC1cOsX9K4wgHV4fV3FCslKaH-MG1pXhkTQx8F9NH7x2_EiyB9AMpU4J3BZQibLoIKvVh--3D39ZMTNJ8x94LvKytjqlML78XavVU1S0tuQPrelQb0RLjkySyLEteyPoL0aYlfT9M7qA6pIR-PH2Du50ZHoWnF-7dWU1zYlYuTQbGSvNh1cksVCeSFexq5Xk7uZpWUS9jaXgK7bLhzBppYKDjNdChq7KQL8TKXXnOe1N2YWmyQyFkWJZZNGCdTfJC_UdhOPAsj-P8RaE8Qw
+Authorization: Bearer {{$auth.token("auth-id")}}
 Content-Type: application/json
 
 {
@@ -94,6 +94,6 @@ Content-Type: application/json
 }
 
 ### Delete Beer by ID
-DELETE http://localhost:8082/api/v2/beer/1
+DELETE http://localhost:{{application-port}}/api/v2/beer/1
 Accept: application/json
-Authorization: Bearer eyJraWQiOiIyMjVmMDU0My1kMDJlLTQzMDMtOTE3MC05MGM0NDcyMTkxMmYiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJtZXNzYWdpbmctY2xpZW50IiwiYXVkIjoibWVzc2FnaW5nLWNsaWVudCIsIm5iZiI6MTczMjc3NzcyMCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo5MDAwIiwiZXhwIjoxNzMyNzc4MDIwLCJpYXQiOjE3MzI3Nzc3MjAsImp0aSI6IjU5ZjI4ZGFiLTBhZWUtNDM4MS1hNTZiLTdhMzAzOTY1MDFmMSJ9.T40SgTxO2avVoSVAGNaUdWY30YRdbkkvMJKpD-sTtKkwKVS1VoH5F6Dvx12UN1CWjalgC1cOsX9K4wgHV4fV3FCslKaH-MG1pXhkTQx8F9NH7x2_EiyB9AMpU4J3BZQibLoIKvVh--3D39ZMTNJ8x94LvKytjqlML78XavVU1S0tuQPrelQb0RLjkySyLEteyPoL0aYlfT9M7qA6pIR-PH2Du50ZHoWnF-7dWU1zYlYuTQbGSvNh1cksVCeSFexq5Xk7uZpWUS9jaXgK7bLhzBppYKDjNdChq7KQL8TKXXnOe1N2YWmyQyFkWJZZNGCdTfJC_UdhOPAsj-P8RaE8Qw
+Authorization: Bearer {{$auth.token("auth-id")}}
