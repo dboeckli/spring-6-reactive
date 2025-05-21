@@ -25,8 +25,7 @@ spring:
     driverClassName: org.h2.Driver
     username: sa
     password: password
-  # TODO: console does not show up: http://localhost:8082/h2-console
-  # TODO: console does show up instead: http://localhost:8082/
+  # REMARK: console does not show up: http://localhost:8082/h2-console. console does show up instead: http://localhost:8082/
   h2:
     console:
       enabled: true
@@ -82,12 +81,15 @@ springdoc:
       client-secret: secret   
       
 security:
+  auth-server-health-url: http://localhost:9000
   authorization-url: http://localhost:9000/oauth2/auth
   token-url: http://localhost:9000/oauth2/token
   refresh-url: http://localhost:9000/oauth2/refresh-token
   cors:
     allowed-origins: 
       - http://localhost:8080 # gateway project runs on port 8080
-      - http://127.0.0.1:8080 # gateway project runs on port 8080     
+      - http://127.0.0.1:8080 # gateway project runs on port 8080
+      - http://localhost:30080 # gateway project runs on port 30080
+      - http://127.0.0.1:30080 # gateway project runs on port 30080
       
       
