@@ -48,7 +48,7 @@ authServer:
   targetPort: 9000
   nodePort: 30900
 
-  serviceFQDN: "http://spring-6-reactive-spring-6-auth-server.spring-6-reactive.svc.cluster.local"
+  serviceFQDN: "spring-6-reactive-spring-6-auth-server.spring-6-reactive.svc.cluster.local"
 
 ingress:
   enabled: false

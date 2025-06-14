@@ -88,6 +88,11 @@ Show Endpoints
 kubectl get endpoints -n spring-6-reactive
 ```
 
+test
+```powershell
+helm test $APPLICATION_NAME --namespace spring-6-reactive --logs
+```
+
 uninstall
 ```powershell
 helm uninstall $APPLICATION_NAME --namespace spring-6-reactive
