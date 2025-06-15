@@ -31,8 +31,8 @@ echo "Your application is exposed via ClusterIP and is not externally accessible
 echo "To access it locally, use port-forwarding:"
 export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "application-template.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
 export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
-echo "  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT"
+echo " kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT"
 echo "Then open:"
-echo "  http://127.0.0.1:8080"
+echo " http://127.0.0.1:8080"
 
 {{- end }}
