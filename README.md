@@ -3,7 +3,7 @@ Welcome to the "Spring Framework 6: Beginner to Guru" project! This project is d
 Here's a quick guide to get you started and contributing:
 
 ## Getting Started:
-Server runs on port 8082. Requires the auth server running on port 9000.
+Server runs on port 8082/30082. Requires the auth server running on port 9000/30900.
 The IntelliJ Project runner is starting both server at one (via docker-compose file).
 
 ## Project Structure:
@@ -13,9 +13,15 @@ The IntelliJ Project runner is starting both server at one (via docker-compose f
 
 ## Urls
 
-- openapi api-docs: http://localhost:8082/v3/api-docs
-- openapi gui: http://localhost:8082/swagger-ui/index.html
-- openapi-yaml: http://localhost:8082/v3/api-docs.yaml
+- openapi api-docs: 
+  - http://localhost:8082/v3/api-docs
+  - http://localhost:30082/v3/api-docs
+- openapi gui: 
+  - http://localhost:8082/swagger-ui/index.html
+  - http://localhost:30082/swagger-ui/index.html
+- openapi-yaml: 
+  - http://localhost:8082/v3/api-docs.yaml
+  - http://localhost:30082/v3/api-docs.yaml
 
 ## Kubernetes
 
@@ -64,7 +70,7 @@ tar -xvf $file.Name
 install
 ```powershell
 $APPLICATION_NAME = Get-ChildItem -Directory | Where-Object { $_.LastWriteTime -ge $file.LastWriteTime } | Select-Object -ExpandProperty Name
-helm upgrade --install $APPLICATION_NAME ./$APPLICATION_NAME --namespace spring-6-reactive --create-namespace --wait --timeout 5m --debug
+helm upgrade --install $APPLICATION_NAME ./$APPLICATION_NAME --namespace spring-6-reactive --create-namespace --wait --timeout 5m --debug --render-subchart-notes
 ```
 
 show logs and show event
@@ -86,6 +92,11 @@ kubectl describe pod $POD_NAME -n spring-6-reactive
 Show Endpoints
 ```powershell
 kubectl get endpoints -n spring-6-reactive
+```
+
+test
+```powershell
+helm test $APPLICATION_NAME --namespace spring-6-reactive --logs
 ```
 
 uninstall
