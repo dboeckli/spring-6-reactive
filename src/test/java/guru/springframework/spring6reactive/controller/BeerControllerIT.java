@@ -5,8 +5,9 @@ import guru.springframework.spring6reactive.model.Beer;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -14,8 +15,10 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+import static guru.springframework.spring6reactive.config.SecurityConfig.READ_SCOPE;
+import static guru.springframework.spring6reactive.config.SecurityConfig.WRITE_SCOPE;
 import static guru.springframework.spring6reactive.helper.TestDataHelperUtil.getTestBeer;
-import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockOAuth2Login;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockJwt;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
@@ -24,36 +27,36 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 @ActiveProfiles(value = "test")
 @Slf4j
 class BeerControllerIT {
-    
+
     @Autowired
     WebTestClient webTestClient;
 
     @Test
     @Order(1)
     void testGetBeerById() {
-      
+
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(READ_SCOPE)))
             .get().uri(BeerController.BEER_PATH_ID, 1)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().valueEquals("content-type", "application/json")
             //.expectBody(BeerDto.class).isEqualTo(BeerDto.builder().beerName("Galaxy Cat").build())
             .expectBody()
-                .jsonPath("$.id").isEqualTo(1)
-                .jsonPath("$.beerName").isEqualTo("Galaxy Cat")
-                .jsonPath("$.beerStyle").isEqualTo("Pale Ale")
-                .jsonPath("$.upc").isEqualTo("12356")
-                .jsonPath("$.price").isEqualTo(13.0)  
-                .jsonPath("$.quantityOnHand").isEqualTo(122);
-        
+            .jsonPath("$.id").isEqualTo(1)
+            .jsonPath("$.beerName").isEqualTo("Galaxy Cat")
+            .jsonPath("$.beerStyle").isEqualTo("Pale Ale")
+            .jsonPath("$.upc").isEqualTo("12356")
+            .jsonPath("$.price").isEqualTo(13.0)
+            .jsonPath("$.quantityOnHand").isEqualTo(122);
+
     }
-    
+
     @Test
     @Order(1)
     void testGetBeerByIdNotFound() {
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(READ_SCOPE)))
             .get().uri(BeerController.BEER_PATH_ID, 99)
             .exchange()
             .expectStatus().isNotFound();
@@ -63,7 +66,7 @@ class BeerControllerIT {
     @Order(2)
     void testListBeers() {
         List<BeerDto> beerList = webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(READ_SCOPE)))
             .get().uri(BeerController.BEER_PATH)
             .exchange()
             .expectStatus().isOk()
@@ -74,14 +77,14 @@ class BeerControllerIT {
 
         Assertions.assertNotNull(beerList);
         beerList.forEach(beer -> log.info("#### Beer: " + beer));
-        
+
     }
 
     @Test
     @Order(3)
     void testCreateBeer() {
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .post().uri(BeerController.BEER_PATH)
             .bodyValue(getTestBeer())
             .header("content-type", "application/json")
@@ -96,9 +99,9 @@ class BeerControllerIT {
     void testCreateBeerNameTooShort() {
         Beer beerToCreate = getTestBeer();
         beerToCreate.setBeerName("N");
-        
+
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .post().uri(BeerController.BEER_PATH)
             //.bodyValue(BeerDto.builder().beerName("N").build())
             .body(Mono.just(beerToCreate), BeerDto.class)
@@ -114,7 +117,7 @@ class BeerControllerIT {
         beerToCreate.setBeerStyle("");
 
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .post().uri(BeerController.BEER_PATH)
             .body(Mono.just(beerToCreate), BeerDto.class)
             .exchange()
@@ -127,9 +130,9 @@ class BeerControllerIT {
     void testUpdateBeer() {
         Beer beerToUpdate = getTestBeer();
         beerToUpdate.setBeerName("New Name");
-        
+
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .put().uri(BeerController.BEER_PATH_ID, 1)
             .bodyValue(beerToUpdate)
             .header("content-type", "application/json")
@@ -144,7 +147,7 @@ class BeerControllerIT {
         beerToUpdate.setBeerName("New Name");
 
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .put().uri(BeerController.BEER_PATH_ID, 888)
             .bodyValue(beerToUpdate)
             .header("content-type", "application/json")
@@ -159,7 +162,7 @@ class BeerControllerIT {
         beerToUpdate.setBeerName("N");
 
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .put().uri(BeerController.BEER_PATH_ID, 1)
             .bodyValue(beerToUpdate)
             .header("content-type", "application/json")
@@ -174,7 +177,7 @@ class BeerControllerIT {
         beerToPatch.setBeerName("New Name");
 
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .patch().uri(BeerController.BEER_PATH_ID, 1)
             .bodyValue(beerToPatch)
             .header("content-type", "application/json")
@@ -189,7 +192,7 @@ class BeerControllerIT {
         beerToPatch.setBeerName("New Name");
 
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .patch().uri(BeerController.BEER_PATH_ID, 777)
             .bodyValue(beerToPatch)
             .header("content-type", "application/json")
@@ -204,7 +207,7 @@ class BeerControllerIT {
         beerToPatch.setBeerName("N");
 
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .patch().uri(BeerController.BEER_PATH_ID, 1)
             .bodyValue(beerToPatch)
             .header("content-type", "application/json")
@@ -216,7 +219,7 @@ class BeerControllerIT {
     @Order(999)
     void deleteBeer() {
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .delete().uri(BeerController.BEER_PATH_ID, 1)
             .exchange()
             .expectStatus().isNoContent();
@@ -226,7 +229,7 @@ class BeerControllerIT {
     @Order(999)
     void deleteBeerNotFound() {
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .delete().uri(BeerController.BEER_PATH_ID, 999)
             .exchange()
             .expectStatus().isNotFound();
