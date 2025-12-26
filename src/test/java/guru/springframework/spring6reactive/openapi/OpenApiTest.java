@@ -1,23 +1,24 @@
-package guru.springframework.spring6reactive.core;
+package guru.springframework.spring6reactive.openapi;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
+@DirtiesContext
+@AutoConfigureWebTestClient
 @Slf4j
 class OpenApiTest {
 
@@ -31,7 +32,7 @@ class OpenApiTest {
     BuildProperties buildProperties;
 
     @Test
-    void openapiGetJsonTest() throws JsonProcessingException {
+    void openapiGetJsonTest() {
         EntityExchangeResult<byte[]> result = webTestClient.get().uri("/v3/api-docs")
             .exchange()
             .expectStatus().isOk()
@@ -44,9 +45,9 @@ class OpenApiTest {
         assertThat(jsonNode.has("info")).isTrue();
         JsonNode infoNode = jsonNode.get("info");
         assertThat(infoNode.has("title")).isTrue();
-        assertThat(infoNode.get("title").asText()).isEqualTo(buildProperties.getName());
-        assertThat(infoNode.get("version").asText()).isEqualTo(buildProperties.getVersion());
-        
+        assertThat(infoNode.get("title").asString()).isEqualTo(buildProperties.getName());
+        assertThat(infoNode.get("version").asString()).isEqualTo(buildProperties.getVersion());
+
         log.info("Response:\n{}", objectMapper.writeValueAsString(jsonNode));
     }
 

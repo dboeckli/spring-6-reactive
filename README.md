@@ -13,6 +13,9 @@ The IntelliJ Project runner is starting both server at one (via docker-compose f
 
 ## Urls
 
+- h2 console:
+  - http://localhost:8088
+  - http://localhost:30088
 - openapi api-docs: 
   - http://localhost:8082/v3/api-docs
   - http://localhost:30082/v3/api-docs
