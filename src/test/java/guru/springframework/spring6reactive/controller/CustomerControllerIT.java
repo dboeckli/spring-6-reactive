@@ -7,13 +7,16 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import static guru.springframework.spring6reactive.config.SecurityConfig.READ_SCOPE;
+import static guru.springframework.spring6reactive.config.SecurityConfig.WRITE_SCOPE;
 import static guru.springframework.spring6reactive.helper.TestDataHelperUtil.getTestCustomer;
-import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockOAuth2Login;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockJwt;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
@@ -28,7 +31,7 @@ class CustomerControllerIT {
     @Order(1)
     void testGetCustomerById() {
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(READ_SCOPE)))
             .get().uri(CustomerController.CUSTOMER_PATH_ID, 1)
             .exchange()
             .expectStatus().isOk()
@@ -42,7 +45,7 @@ class CustomerControllerIT {
     @Order(1)
     void testGetCustomerByIdNotFound() {
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(READ_SCOPE)))
             .get().uri(CustomerController.CUSTOMER_PATH_ID, 99)
             .exchange()
             .expectStatus().isNotFound();
@@ -52,7 +55,7 @@ class CustomerControllerIT {
     @Order(2)
     void testListCustomers() {
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(READ_SCOPE)))
             .get().uri(CustomerController.CUSTOMER_PATH)
             .exchange()
             .expectStatus().isOk()
@@ -65,7 +68,7 @@ class CustomerControllerIT {
     @Order(3)
     void testCreateCustomer() {
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .post().uri(CustomerController.CUSTOMER_PATH)
             .bodyValue(getTestCustomer())
             .header("content-type", "application/json")
@@ -78,7 +81,7 @@ class CustomerControllerIT {
     @Order(4)
     void testCreateCustomerNameTooShort() {
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .post().uri(CustomerController.CUSTOMER_PATH)
             .bodyValue(CustomerDto.builder().customerName("N").build())
             .exchange()
@@ -93,7 +96,7 @@ class CustomerControllerIT {
         customerToUpdate.setCustomerName("Updated Customer Name");
 
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .put().uri(CustomerController.CUSTOMER_PATH_ID, 1)
             .bodyValue(customerToUpdate)
             .header("content-type", "application/json")
@@ -108,7 +111,7 @@ class CustomerControllerIT {
         customerToUpdate.setCustomerName("New Name");
 
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .put().uri(CustomerController.CUSTOMER_PATH_ID, 888)
             .bodyValue(customerToUpdate)
             .header("content-type", "application/json")
@@ -123,7 +126,7 @@ class CustomerControllerIT {
         customerToPatch.setCustomerName("N");
 
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .put().uri(CustomerController.CUSTOMER_PATH_ID, 1)
             .bodyValue(customerToPatch)
             .header("content-type", "application/json")
@@ -138,7 +141,7 @@ class CustomerControllerIT {
         customerToPatch.setCustomerName("Patched Customer Name");
 
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .patch().uri(CustomerController.CUSTOMER_PATH_ID, 1)
             .bodyValue(customerToPatch)
             .header("content-type", "application/json")
@@ -153,7 +156,7 @@ class CustomerControllerIT {
         customerToPatch.setCustomerName("New Name");
 
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .patch().uri(CustomerController.CUSTOMER_PATH_ID, 777)
             .bodyValue(customerToPatch)
             .header("content-type", "application/json")
@@ -168,7 +171,7 @@ class CustomerControllerIT {
         customerToPatch.setCustomerName("N");
 
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .patch().uri(CustomerController.CUSTOMER_PATH_ID, 777)
             .bodyValue(customerToPatch)
             .header("content-type", "application/json")
@@ -177,12 +180,11 @@ class CustomerControllerIT {
     }
 
 
-
     @Test
     @Order(999)
     void testDeleteCustomer() {
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .delete().uri(CustomerController.CUSTOMER_PATH_ID, 1)
             .exchange()
             .expectStatus().isNoContent();
@@ -192,7 +194,7 @@ class CustomerControllerIT {
     @Order(999)
     void deleteCustomerNotFound() {
         webTestClient
-            .mutateWith(mockOAuth2Login())
+            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
             .delete().uri(CustomerController.CUSTOMER_PATH_ID, 999)
             .exchange()
             .expectStatus().isNotFound();
