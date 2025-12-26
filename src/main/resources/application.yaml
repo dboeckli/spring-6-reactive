@@ -12,20 +12,69 @@ management:
       exposure:
         include: "*"
   endpoint:
+    configprops:
+      # WARNING: SECURITY RISK - DO NOT USE IN PRODUCTION ENVIRONMENT
+      # This configuration exposes sensitive data and should only be used for development or testing purposes.
+      # Ensure this is disabled in any environment where security is a concern.
+      show-values: ALWAYS
     health:
       probes:
         enabled: true
-      show-details: always  
+      show-details: always
+  info:
+    build:
+      enabled: true
+    env:
+      enabled: true
+    java:
+      enabled: true
+    os:
+      enabled: true
+    git:
+      enabled: true
+      mode: full
+  httpexchanges:
+    recording:
+      enabled: true
+      include: request_headers, response_headers, session_id, time_taken
+  observations:
+    http:
+      server:
+        requests:
+          name: http.server.requests
+      client:
+        requests:
+          name: http-client-requests
+  otlp:
+    metrics:
+      export:
+        enabled: false
+  tracing:
+    export:
+      otlp:
+        enabled: false
+    sampling:
+      probability: 1.0
+  logging:
+    export:
+      enabled: false
+      otlp:
+        enabled: false
+  simple:
+    metrics:
+      export:
+        enabled: false
 
 spring:
   application:
     name: spring-6-reactive
-  datasource:
-    url: jdbc:h2:mem:reactivedb;DB_CLOSE_ON_EXIT=TRUE
-    driverClassName: org.h2.Driver
+
+  r2dbc:
+    url: r2dbc:h2:mem:///reactivedb?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE
     username: sa
     password: password
-  # REMARK: console does not show up: http://localhost:8082/h2-console. console does show up instead: http://localhost:8082/
+
+  # REMARK: console does not show up: http://localhost:8082/h2-console. console does show up instead: http://localhost:8088/
   h2:
     console:
       enabled: true
@@ -46,28 +95,6 @@ spring:
 logging:
   level:
     org.springframework.r2dbc: DEBUG
-    org.zalando.logbook: TRACE     
-    
-logbook:
-  filter:
-    enabled: true
-  format:
-    style: http
-  obfuscate:
-    headers:
-      - Authorization
-      - X-Secret
-    parameters:
-      - access_token
-      - password
-  predicate:
-    exclude:
-      # Exclude HTML-related calls and specific endpoints that Logbook doesn't handle correctly
-      - path: /actuator/health/**
-      - path: /h2-console/**  # Exclude H2 console
-      - path: /swagger-ui/**  # Exclude Swagger UI if used
-      - path: /v3/api-docs/** # Exclude OpenAPI docs if used
-      # Add more exclusions as needed
 
 springdoc:
   show-actuator: false

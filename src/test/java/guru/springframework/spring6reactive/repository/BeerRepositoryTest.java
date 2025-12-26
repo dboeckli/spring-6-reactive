@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
+import org.springframework.boot.data.r2dbc.test.autoconfigure.DataR2dbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.ReactiveTransactionManager;
@@ -52,7 +52,7 @@ class BeerRepositoryTest {
                 return savedBeer.getBeerName().equals("New Name 2");
             }).verifyComplete();
 
-        beerRepository.findAll().subscribe(beer -> log.info("### testSave2: " + beer.toString()));
+        beerRepository.findAll().subscribe(beer -> log.info("### testSave2: " + beer));
 
     }
 
@@ -75,7 +75,7 @@ class BeerRepositoryTest {
 
         }).verifyComplete();
 
-        beerRepository.findAll().subscribe(beer -> log.info("### testSave3: " + beer.toString()));
+        beerRepository.findAll().subscribe(beer -> log.info("### testSave3: " + beer));
     }
 
     @Test
@@ -95,7 +95,7 @@ class BeerRepositoryTest {
             })
             .verifyComplete();
 
-        beerRepository.findAll().subscribe(beer -> log.info("### testSave: " + beer.toString()));
+        beerRepository.findAll().subscribe(beer -> log.info("### testSave: " + beer));
     }
     
     @Test
