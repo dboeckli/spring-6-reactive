@@ -31,7 +31,7 @@ spec:
     spec:
       initContainers:
         - name: wait-for-auth-server
-          image: busybox:1.37.0
+          image: busybox:1.38.0
           command: [ 'sh', '-c', 'until nc -z auth-server 9000; do echo "[busybox: wait-for-auth-server] waiting for auth-server"; sleep 2; done; echo "[busybox: wait-for-auth-server] auth-server is available"' ]
       containers:
         - name: @project.artifactId@
