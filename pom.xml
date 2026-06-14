@@ -5,8 +5,8 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>4.1.0</version>
+    <!-- to avoid conflicts between sortpom and release maven plugin, we add here the space before the closing slash -->
     <relativePath />
-    <!-- lookup parent from repository -->
   </parent>
 
   <groupId>guru.springframework</groupId>
