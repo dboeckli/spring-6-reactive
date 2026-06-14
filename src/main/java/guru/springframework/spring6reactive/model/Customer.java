@@ -18,6 +18,7 @@ public class Customer {
 
     @Id
     private Integer id;
+
     private String customerName;
 
     @CreatedDate
@@ -25,4 +26,5 @@ public class Customer {
 
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
+
 }

@@ -35,45 +35,59 @@ class BeerControllerIT {
     @Order(1)
     void testGetBeerById() {
 
-        webTestClient
-            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(READ_SCOPE)))
-            .get().uri(BeerController.BEER_PATH_ID, 1)
+        webTestClient.mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(READ_SCOPE)))
+            .get()
+            .uri(BeerController.BEER_PATH_ID, 1)
             .exchange()
-            .expectStatus().isOk()
-            .expectHeader().valueEquals("content-type", "application/json")
-            //.expectBody(BeerDto.class).isEqualTo(BeerDto.builder().beerName("Galaxy Cat").build())
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .valueEquals("content-type", "application/json")
+            // .expectBody(BeerDto.class).isEqualTo(BeerDto.builder().beerName("Galaxy
+            // Cat").build())
             .expectBody()
-            .jsonPath("$.id").isEqualTo(1)
-            .jsonPath("$.beerName").isEqualTo("Galaxy Cat")
-            .jsonPath("$.beerStyle").isEqualTo("Pale Ale")
-            .jsonPath("$.upc").isEqualTo("12356")
-            .jsonPath("$.price").isEqualTo(13.0)
-            .jsonPath("$.quantityOnHand").isEqualTo(122);
+            .jsonPath("$.id")
+            .isEqualTo(1)
+            .jsonPath("$.beerName")
+            .isEqualTo("Galaxy Cat")
+            .jsonPath("$.beerStyle")
+            .isEqualTo("Pale Ale")
+            .jsonPath("$.upc")
+            .isEqualTo("12356")
+            .jsonPath("$.price")
+            .isEqualTo(13.0)
+            .jsonPath("$.quantityOnHand")
+            .isEqualTo(122);
 
     }
 
     @Test
     @Order(1)
     void testGetBeerByIdNotFound() {
-        webTestClient
-            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(READ_SCOPE)))
-            .get().uri(BeerController.BEER_PATH_ID, 99)
+        webTestClient.mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(READ_SCOPE)))
+            .get()
+            .uri(BeerController.BEER_PATH_ID, 99)
             .exchange()
-            .expectStatus().isNotFound();
+            .expectStatus()
+            .isNotFound();
     }
 
     @Test
     @Order(2)
     void testListBeers() {
-        List<BeerDto> beerList = webTestClient
-            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(READ_SCOPE)))
-            .get().uri(BeerController.BEER_PATH)
+        List<BeerDto> beerList = webTestClient.mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(READ_SCOPE)))
+            .get()
+            .uri(BeerController.BEER_PATH)
             .exchange()
-            .expectStatus().isOk()
-            .expectHeader().valueEquals("content-type", "application/json")
-            //.expectBody().jsonPath("$.length()").isEqualTo(3)
-            .expectBodyList(BeerDto.class).hasSize(3)
-            .returnResult().getResponseBody();
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .valueEquals("content-type", "application/json")
+            // .expectBody().jsonPath("$.length()").isEqualTo(3)
+            .expectBodyList(BeerDto.class)
+            .hasSize(3)
+            .returnResult()
+            .getResponseBody();
 
         Assertions.assertNotNull(beerList);
         beerList.forEach(beer -> log.info("#### Beer: " + beer));
@@ -83,15 +97,17 @@ class BeerControllerIT {
     @Test
     @Order(3)
     void testCreateBeer() {
-        webTestClient
-            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
-            .post().uri(BeerController.BEER_PATH)
+        webTestClient.mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
+            .post()
+            .uri(BeerController.BEER_PATH)
             .bodyValue(getTestBeer())
             .header("content-type", "application/json")
             .exchange()
-            .expectStatus().isCreated()
-            //.expectHeader().location("http://localhost:8080/api/v2/beer/4")
-            .expectHeader().valueMatches("location", "http://localhost:8080/api/v2/beer/\\d+$");
+            .expectStatus()
+            .isCreated()
+            // .expectHeader().location("http://localhost:8080/api/v2/beer/4")
+            .expectHeader()
+            .valueMatches("location", "http://localhost:8080/api/v2/beer/\\d+$");
     }
 
     @Test
@@ -100,14 +116,16 @@ class BeerControllerIT {
         Beer beerToCreate = getTestBeer();
         beerToCreate.setBeerName("N");
 
-        webTestClient
-            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
-            .post().uri(BeerController.BEER_PATH)
-            //.bodyValue(BeerDto.builder().beerName("N").build())
+        webTestClient.mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
+            .post()
+            .uri(BeerController.BEER_PATH)
+            // .bodyValue(BeerDto.builder().beerName("N").build())
             .body(Mono.just(beerToCreate), BeerDto.class)
             .exchange()
-            .expectHeader().valueEquals("content-type", "application/json")
-            .expectStatus().isBadRequest();
+            .expectHeader()
+            .valueEquals("content-type", "application/json")
+            .expectStatus()
+            .isBadRequest();
     }
 
     @Test
@@ -116,13 +134,15 @@ class BeerControllerIT {
         Beer beerToCreate = getTestBeer();
         beerToCreate.setBeerStyle("");
 
-        webTestClient
-            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
-            .post().uri(BeerController.BEER_PATH)
+        webTestClient.mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
+            .post()
+            .uri(BeerController.BEER_PATH)
             .body(Mono.just(beerToCreate), BeerDto.class)
             .exchange()
-            .expectHeader().valueEquals("content-type", "application/json")
-            .expectStatus().isBadRequest();
+            .expectHeader()
+            .valueEquals("content-type", "application/json")
+            .expectStatus()
+            .isBadRequest();
     }
 
     @Test
@@ -131,13 +151,14 @@ class BeerControllerIT {
         Beer beerToUpdate = getTestBeer();
         beerToUpdate.setBeerName("New Name");
 
-        webTestClient
-            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
-            .put().uri(BeerController.BEER_PATH_ID, 1)
+        webTestClient.mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
+            .put()
+            .uri(BeerController.BEER_PATH_ID, 1)
             .bodyValue(beerToUpdate)
             .header("content-type", "application/json")
             .exchange()
-            .expectStatus().isOk();
+            .expectStatus()
+            .isOk();
     }
 
     @Test
@@ -146,13 +167,14 @@ class BeerControllerIT {
         Beer beerToUpdate = getTestBeer();
         beerToUpdate.setBeerName("New Name");
 
-        webTestClient
-            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
-            .put().uri(BeerController.BEER_PATH_ID, 888)
+        webTestClient.mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
+            .put()
+            .uri(BeerController.BEER_PATH_ID, 888)
             .bodyValue(beerToUpdate)
             .header("content-type", "application/json")
             .exchange()
-            .expectStatus().isNotFound();
+            .expectStatus()
+            .isNotFound();
     }
 
     @Test
@@ -161,13 +183,14 @@ class BeerControllerIT {
         Beer beerToUpdate = getTestBeer();
         beerToUpdate.setBeerName("N");
 
-        webTestClient
-            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
-            .put().uri(BeerController.BEER_PATH_ID, 1)
+        webTestClient.mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
+            .put()
+            .uri(BeerController.BEER_PATH_ID, 1)
             .bodyValue(beerToUpdate)
             .header("content-type", "application/json")
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
     }
 
     @Test
@@ -176,13 +199,14 @@ class BeerControllerIT {
         Beer beerToPatch = getTestBeer();
         beerToPatch.setBeerName("New Name");
 
-        webTestClient
-            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
-            .patch().uri(BeerController.BEER_PATH_ID, 1)
+        webTestClient.mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
+            .patch()
+            .uri(BeerController.BEER_PATH_ID, 1)
             .bodyValue(beerToPatch)
             .header("content-type", "application/json")
             .exchange()
-            .expectStatus().isOk();
+            .expectStatus()
+            .isOk();
     }
 
     @Test
@@ -191,13 +215,14 @@ class BeerControllerIT {
         Beer beerToPatch = getTestBeer();
         beerToPatch.setBeerName("New Name");
 
-        webTestClient
-            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
-            .patch().uri(BeerController.BEER_PATH_ID, 777)
+        webTestClient.mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
+            .patch()
+            .uri(BeerController.BEER_PATH_ID, 777)
             .bodyValue(beerToPatch)
             .header("content-type", "application/json")
             .exchange()
-            .expectStatus().isNotFound();
+            .expectStatus()
+            .isNotFound();
     }
 
     @Test
@@ -206,32 +231,36 @@ class BeerControllerIT {
         Beer beerToPatch = getTestBeer();
         beerToPatch.setBeerName("N");
 
-        webTestClient
-            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
-            .patch().uri(BeerController.BEER_PATH_ID, 1)
+        webTestClient.mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
+            .patch()
+            .uri(BeerController.BEER_PATH_ID, 1)
             .bodyValue(beerToPatch)
             .header("content-type", "application/json")
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
     }
 
     @Test
     @Order(999)
     void deleteBeer() {
-        webTestClient
-            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
-            .delete().uri(BeerController.BEER_PATH_ID, 1)
+        webTestClient.mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
+            .delete()
+            .uri(BeerController.BEER_PATH_ID, 1)
             .exchange()
-            .expectStatus().isNoContent();
+            .expectStatus()
+            .isNoContent();
     }
 
     @Test
     @Order(999)
     void deleteBeerNotFound() {
-        webTestClient
-            .mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
-            .delete().uri(BeerController.BEER_PATH_ID, 999)
+        webTestClient.mutateWith(mockJwt().authorities(new SimpleGrantedAuthority(WRITE_SCOPE)))
+            .delete()
+            .uri(BeerController.BEER_PATH_ID, 999)
             .exchange()
-            .expectStatus().isNotFound();
+            .expectStatus()
+            .isNotFound();
     }
+
 }

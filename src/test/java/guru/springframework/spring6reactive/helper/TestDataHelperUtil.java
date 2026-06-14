@@ -18,9 +18,7 @@ public class TestDataHelperUtil {
     }
 
     public static Customer getTestCustomer() {
-        return Customer.builder()
-            .customerName("Test Customer")
-            .build();
+        return Customer.builder().customerName("Test Customer").build();
     }
-    
+
 }

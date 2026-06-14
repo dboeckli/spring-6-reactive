@@ -6,6 +6,7 @@ import guru.springframework.spring6reactive.repository.BeerRepository;
 import guru.springframework.spring6reactive.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.jspecify.annotations.NonNull;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -18,14 +19,14 @@ import java.time.LocalDateTime;
 public class BootstrapData implements CommandLineRunner {
 
     private final BeerRepository beerRepository;
-    
+
     private final CustomerRepository customerRepository;
 
     @Override
-    public void run(String... args) {
+    public void run(String @NonNull ... args) {
         loadBeerData();
         loadCustomerData();
-        
+
         log.info("Bootstrapping data");
 
         beerRepository.count().subscribe(count -> log.info("Beer data loaded: " + count));
@@ -109,4 +110,5 @@ public class BootstrapData implements CommandLineRunner {
             }
         });
     }
+
 }

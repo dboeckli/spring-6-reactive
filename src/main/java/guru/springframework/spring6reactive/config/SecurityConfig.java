@@ -32,9 +32,11 @@ import static guru.springframework.spring6reactive.controller.CustomerController
 public class SecurityConfig {
 
     private static final List<String> ALLOWED_HEADERS = List.of("*");
+
     private static final List<String> ALLOWED_METHODS = List.of("POST", "GET", "PUT", "OPTIONS", "DELETE", "PATCH");
 
     public static final String READ_SCOPE = "SCOPE_message.read";
+
     public static final String WRITE_SCOPE = "SCOPE_message.write";
 
     private final AllowedOriginConfig allowedOriginConfig;
@@ -46,9 +48,9 @@ public class SecurityConfig {
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
-    SecurityWebFilterChain springSecurityActuator(ServerHttpSecurity http, CorsConfigurationSource corsConfigurationSource) {
-        return http
-            .securityMatcher(EndpointRequest.toAnyEndpoint())
+    SecurityWebFilterChain springSecurityActuator(ServerHttpSecurity http,
+            CorsConfigurationSource corsConfigurationSource) {
+        return http.securityMatcher(EndpointRequest.toAnyEndpoint())
             .csrf(ServerHttpSecurity.CsrfSpec::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource))
             .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
@@ -60,32 +62,36 @@ public class SecurityConfig {
     @Bean
     @Order(Ordered.LOWEST_PRECEDENCE)
     SecurityWebFilterChain springSecurity(ServerHttpSecurity http, CorsConfigurationSource corsConfigurationSource) {
-        return http
-            .csrf(ServerHttpSecurity.CsrfSpec::disable)
+        return http.csrf(ServerHttpSecurity.CsrfSpec::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource))
             .headers(headers -> headers.frameOptions(ServerHttpSecurity.HeaderSpec.FrameOptionsSpec::disable))
             .authorizeExchange(exchange -> exchange
-                .pathMatchers(
-                    "/favicon.ico",
-                    "/v3/api-docs",
-                    "/v3/api-docs.yaml",
-                    "/v3/api-docs/**",
-                    "/swagger-ui/**",
-                    "/swagger-ui.html"
-                ).permitAll()
+                .pathMatchers("/favicon.ico", "/v3/api-docs", "/v3/api-docs.yaml", "/v3/api-docs/**", "/swagger-ui/**",
+                        "/swagger-ui.html")
+                .permitAll()
 
-                .pathMatchers(HttpMethod.GET, CUSTOMER_PATH + "/**").hasAuthority(READ_SCOPE)
-                .pathMatchers(HttpMethod.POST, CUSTOMER_PATH + "/**").hasAuthority(WRITE_SCOPE)
-                .pathMatchers(HttpMethod.PUT, CUSTOMER_PATH + "/**").hasAuthority(WRITE_SCOPE)
-                .pathMatchers(HttpMethod.PATCH, CUSTOMER_PATH + "/**").hasAuthority(WRITE_SCOPE)
-                .pathMatchers(HttpMethod.DELETE, CUSTOMER_PATH + "/**").hasAuthority(WRITE_SCOPE)
-                .pathMatchers(HttpMethod.GET, BEER_PATH + "/**").hasAuthority(READ_SCOPE)
-                .pathMatchers(HttpMethod.POST, BEER_PATH + "/**").hasAuthority(WRITE_SCOPE)
-                .pathMatchers(HttpMethod.PUT, BEER_PATH + "/**").hasAuthority(WRITE_SCOPE)
-                .pathMatchers(HttpMethod.PATCH, BEER_PATH + "/**").hasAuthority(WRITE_SCOPE)
-                .pathMatchers(HttpMethod.DELETE, BEER_PATH + "/**").hasAuthority(WRITE_SCOPE)
-                .anyExchange().authenticated()
-            )
+                .pathMatchers(HttpMethod.GET, CUSTOMER_PATH + "/**")
+                .hasAuthority(READ_SCOPE)
+                .pathMatchers(HttpMethod.POST, CUSTOMER_PATH + "/**")
+                .hasAuthority(WRITE_SCOPE)
+                .pathMatchers(HttpMethod.PUT, CUSTOMER_PATH + "/**")
+                .hasAuthority(WRITE_SCOPE)
+                .pathMatchers(HttpMethod.PATCH, CUSTOMER_PATH + "/**")
+                .hasAuthority(WRITE_SCOPE)
+                .pathMatchers(HttpMethod.DELETE, CUSTOMER_PATH + "/**")
+                .hasAuthority(WRITE_SCOPE)
+                .pathMatchers(HttpMethod.GET, BEER_PATH + "/**")
+                .hasAuthority(READ_SCOPE)
+                .pathMatchers(HttpMethod.POST, BEER_PATH + "/**")
+                .hasAuthority(WRITE_SCOPE)
+                .pathMatchers(HttpMethod.PUT, BEER_PATH + "/**")
+                .hasAuthority(WRITE_SCOPE)
+                .pathMatchers(HttpMethod.PATCH, BEER_PATH + "/**")
+                .hasAuthority(WRITE_SCOPE)
+                .pathMatchers(HttpMethod.DELETE, BEER_PATH + "/**")
+                .hasAuthority(WRITE_SCOPE)
+                .anyExchange()
+                .authenticated())
             .oauth2ResourceServer(oAuth2 -> oAuth2.jwt(Customizer.withDefaults()))
             .build();
     }
@@ -109,6 +115,9 @@ public class SecurityConfig {
     @ConfigurationProperties(prefix = "security.cors")
     @Data
     public static class AllowedOriginConfig {
+
         private List<String> allowedOrigins;
+
     }
+
 }

@@ -99,7 +99,7 @@ spring:
     compose:
       enabled: true
       stop:
-        command: down        
+        command: down
 
 logging:
   level:
@@ -114,18 +114,17 @@ springdoc:
     oauth:
       # do that not on production!
       client-id: messaging-client
-      client-secret: secret   
-      
+      client-secret: secret
+
 security:
   auth-server-health-url: http://localhost:9000
   authorization-url: http://localhost:9000/oauth2/auth
   token-url: http://localhost:9000/oauth2/token
   refresh-url: http://localhost:9000/oauth2/refresh-token
   cors:
-    allowed-origins: 
+    allowed-origins:
       - http://localhost:8080 # gateway project runs on port 8080
       - http://127.0.0.1:8080 # gateway project runs on port 8080
       - http://localhost:30080 # gateway project runs on port 30080
       - http://127.0.0.1:30080 # gateway project runs on port 30080
-      
-      
+

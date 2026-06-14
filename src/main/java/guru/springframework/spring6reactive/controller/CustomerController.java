@@ -25,7 +25,7 @@ public class CustomerController {
     public static final String CUSTOMER_PATH_ID = CUSTOMER_PATH + "/{customerId}";
 
     private final CustomerService customerService;
-    
+
     private static final String CUSTOMER_NOT_FOUND_MESSAGE = "Customer not found";
 
     @GetMapping(CUSTOMER_PATH_ID)
@@ -35,22 +35,24 @@ public class CustomerController {
     }
 
     @GetMapping(CUSTOMER_PATH)
-    Flux<CustomerDto> listCustomers(){        
+    Flux<CustomerDto> listCustomers() {
         return customerService.listCustomers();
     }
 
     @PostMapping(CUSTOMER_PATH)
-    Mono<ResponseEntity<Void>> createCustomer(@Validated @RequestBody CustomerDto customerDto){
+    Mono<ResponseEntity<Void>> createCustomer(@Validated @RequestBody CustomerDto customerDto) {
         return customerService.saveNewCustomer(customerDto)
-            .map(savedDto -> ResponseEntity.created(UriComponentsBuilder
+            .map(savedDto -> ResponseEntity
+                .created(UriComponentsBuilder
                     .fromUriString("http://localhost:8080/" + CUSTOMER_PATH + "/" + savedDto.getId())
-                    .build().toUri())
+                    .build()
+                    .toUri())
                 .build());
     }
 
     @PutMapping(CUSTOMER_PATH_ID)
     Mono<ResponseEntity<Void>> updateCustomer(@PathVariable("customerId") Integer customerId,
-                                              @Validated @RequestBody CustomerDto customerDto) {
+            @Validated @RequestBody CustomerDto customerDto) {
 
         return customerService.updateCustomer(customerId, customerDto)
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, CUSTOMER_NOT_FOUND_MESSAGE)))
@@ -59,7 +61,7 @@ public class CustomerController {
 
     @PatchMapping(value = CUSTOMER_PATH_ID)
     Mono<ResponseEntity<Void>> patchCustomer(@PathVariable("customerId") Integer customerId,
-                                             @Validated @RequestBody CustomerDto customerDto) {
+            @Validated @RequestBody CustomerDto customerDto) {
 
         return customerService.patchCustomer(customerId, customerDto)
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, CUSTOMER_NOT_FOUND_MESSAGE)))
@@ -73,5 +75,5 @@ public class CustomerController {
             .map(customerDto -> customerService.deleteCustomer(customerDto.getId()))
             .thenReturn(ResponseEntity.noContent().build());
     }
-    
+
 }

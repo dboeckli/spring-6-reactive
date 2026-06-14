@@ -14,9 +14,9 @@ import reactor.core.publisher.Mono;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-    
+
     private final CustomerMapper customerMapper;
-    
+
     @Override
     public Flux<CustomerDto> listCustomers() {
         return customerRepository.findAll().map(customerMapper::customerToCustomerDto);
@@ -35,28 +35,25 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Mono<CustomerDto> updateCustomer(Integer customerId, CustomerDto customerDto) {
-        return customerRepository.findById(customerId)
-            .map(foundCustomer -> {
-                foundCustomer.setCustomerName(customerDto.getCustomerName());
-                return foundCustomer;
-            }).flatMap(customerRepository::save)
-            .map(customerMapper::customerToCustomerDto);
+        return customerRepository.findById(customerId).map(foundCustomer -> {
+            foundCustomer.setCustomerName(customerDto.getCustomerName());
+            return foundCustomer;
+        }).flatMap(customerRepository::save).map(customerMapper::customerToCustomerDto);
     }
 
     @Override
     public Mono<CustomerDto> patchCustomer(Integer customerId, CustomerDto customerDto) {
-        return customerRepository.findById(customerId)
-            .map(foundCustomer -> {
-                if (StringUtils.hasText(customerDto.getCustomerName())) {
-                    foundCustomer.setCustomerName(customerDto.getCustomerName());
-                }
-                return foundCustomer;
-            }).flatMap(customerRepository::save)
-            .map(customerMapper::customerToCustomerDto);
+        return customerRepository.findById(customerId).map(foundCustomer -> {
+            if (StringUtils.hasText(customerDto.getCustomerName())) {
+                foundCustomer.setCustomerName(customerDto.getCustomerName());
+            }
+            return foundCustomer;
+        }).flatMap(customerRepository::save).map(customerMapper::customerToCustomerDto);
     }
 
     @Override
     public Mono<Void> deleteCustomer(Integer customerId) {
         return customerRepository.deleteById(customerId);
     }
+
 }

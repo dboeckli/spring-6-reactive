@@ -22,5 +22,7 @@ public class CustomerDto {
     private String customerName;
 
     private LocalDateTime createdDate;
+
     private LocalDateTime lastModifiedDate;
+
 }
