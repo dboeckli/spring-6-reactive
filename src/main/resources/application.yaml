@@ -104,6 +104,7 @@ spring:
 logging:
   level:
     org.springframework.r2dbc: DEBUG
+    guru.springframework.spring6reactive.log.RequestLoggingFilter: DEBUG
 
 springdoc:
   show-actuator: false
