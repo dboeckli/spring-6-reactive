@@ -17,6 +17,7 @@ public class H2ConsoleConfiguration {
     private org.h2.tools.Server tcpServer;
 
     private static final String WEB_PORT = "8088";
+
     private static final String TCP_PORT = "9098";
 
     @EventListener(ContextRefreshedEvent.class)

@@ -12,6 +12,7 @@ import org.springframework.web.client.RestClient;
 public class AuthServerHealthIndicator implements HealthIndicator {
 
     private final RestClient restClient;
+
     private final String authServerUrl;
 
     public AuthServerHealthIndicator(@Value("${security.auth-server-health-url}") String authServerUrl) {
@@ -22,17 +23,16 @@ public class AuthServerHealthIndicator implements HealthIndicator {
     @Override
     public Health health() {
         try {
-            String response = restClient.get()
-                .uri(authServerUrl + "/actuator/health")
-                .retrieve()
-                .body(String.class);
+            String response = restClient.get().uri(authServerUrl + "/actuator/health").retrieve().body(String.class);
             if (response != null && response.contains("\"status\":\"UP\"")) {
                 return Health.up().build();
-            } else {
+            }
+            else {
                 log.warn("Auth server is not reporting UP status at {}", authServerUrl);
                 return Health.down().build();
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             log.warn("Auth server is not reachable at {}", authServerUrl, e);
             return Health.down(e).build();
         }

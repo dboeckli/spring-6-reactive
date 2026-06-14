@@ -10,17 +10,19 @@ import org.springframework.r2dbc.connection.init.ConnectionFactoryInitializer;
 import org.springframework.r2dbc.connection.init.ResourceDatabasePopulator;
 
 @Configuration
-@EnableR2dbcAuditing // this enables auditing for @CreatedDate and @LastModifiedDate annotations
+@EnableR2dbcAuditing // this enables auditing for @CreatedDate and @LastModifiedDate
+                     // annotations
 public class DatabaseConfig {
 
     @Value("classpath:/schema.sql")
     Resource resource;
 
     @Bean
-    ConnectionFactoryInitializer initializer(ConnectionFactory connectionFactory){
+    ConnectionFactoryInitializer initializer(ConnectionFactory connectionFactory) {
         ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();
         initializer.setConnectionFactory(connectionFactory);
         initializer.setDatabasePopulator(new ResourceDatabasePopulator(resource));
         return initializer;
     }
+
 }

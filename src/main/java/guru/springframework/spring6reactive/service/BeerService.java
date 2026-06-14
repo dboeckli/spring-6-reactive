@@ -5,7 +5,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface BeerService {
-    
+
     Flux<BeerDto> listBeers();
 
     Mono<BeerDto> getBeerById(Integer beerId);
@@ -17,4 +17,5 @@ public interface BeerService {
     Mono<BeerDto> patchBeer(Integer beerId, BeerDto beerDto);
 
     Mono<Void> deleteBeer(Integer beerId);
+
 }

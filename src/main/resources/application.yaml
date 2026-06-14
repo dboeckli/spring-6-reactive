@@ -38,6 +38,8 @@ management:
       enabled: true
       include: request_headers, response_headers, session_id, time_taken
   observations:
+    annotations:
+      enabled: true
     http:
       server:
         requests:
@@ -69,6 +71,13 @@ spring:
   application:
     name: spring-6-reactive
 
+  reactor:
+    context-propagation: AUTO
+
+  threads:
+    virtual:
+      enabled: true
+
   r2dbc:
     url: r2dbc:h2:mem:///reactivedb?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE
     username: sa
@@ -90,11 +99,12 @@ spring:
     compose:
       enabled: true
       stop:
-        command: down        
+        command: down
 
 logging:
   level:
     org.springframework.r2dbc: DEBUG
+    guru.springframework.spring6reactive.log.RequestLoggingFilter: DEBUG
 
 springdoc:
   show-actuator: false
@@ -105,18 +115,17 @@ springdoc:
     oauth:
       # do that not on production!
       client-id: messaging-client
-      client-secret: secret   
-      
+      client-secret: secret
+
 security:
   auth-server-health-url: http://localhost:9000
   authorization-url: http://localhost:9000/oauth2/auth
   token-url: http://localhost:9000/oauth2/token
   refresh-url: http://localhost:9000/oauth2/refresh-token
   cors:
-    allowed-origins: 
+    allowed-origins:
       - http://localhost:8080 # gateway project runs on port 8080
       - http://127.0.0.1:8080 # gateway project runs on port 8080
       - http://localhost:30080 # gateway project runs on port 30080
       - http://127.0.0.1:30080 # gateway project runs on port 30080
-      
-      
+
