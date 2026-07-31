@@ -6,13 +6,115 @@ Here's a quick guide to get you started and contributing:
 ## Getting Started:
 
 Server runs on port 8082/30082. Requires the auth server running on port 9000/30900.
-The IntelliJ Project runner is starting both server at one (via docker-compose file).
+The auth-server starts automatically via Docker Compose (`compose.yaml`) because `spring.docker.compose.enabled=true` in application.yaml.
+
+Use the checked-in IntelliJ run configuration `.run/Spring6ReactiveApplication.run.xml` to start the app locally (no manual setup required).
+
+## Sandbox (local dev environment)
+
+The sandbox consists of the app (Spring Boot, port 8082) plus an auth-server (port 9000) provided by Docker Compose. The auth-server starts automatically via `spring.docker.compose.enabled=true` when the app boots, so usually one step is enough.
+
+### Start the sandbox (opencode-sandbox-kit)
+
+The sandbox is provisioned by the opencode-sandbox-kit and runs as a Docker container. It mounts this repo, starts opencode, and connects the IntelliJ MCP server.
+
+Allow the kit source (GitHub without cloning):
+
+```powershell
+sbx settings set kit.allowedSources --% "[\"docker.io/\",\"github.com/dboeckli/\"]"
+```
+
+Start a new sandbox:
+
+```powershell
+sbx run opencode --name spring-6-reactive --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git" "C:\development\projects\spring-6-reactive"
+```
+
+Apply the kit to an existing sandbox (restarts the sandbox, VM state is kept):
+
+```powershell
+sbx kit add spring-6-reactive "git+https://github.com/dboeckli/opencode-sandbox-kit.git"
+```
+
+### Start the app
+
+```shell
+docker compose up        # optional: start auth-server manually (else it starts with the app)
+```
+
+Then run the `Spring6ReactiveApplication` run configuration in IntelliJ (`.run/Spring6ReactiveApplication.run.xml`, main class `guru.springframework.spring6reactive.Spring6ReactiveApplication`).
+
+The compose file brings up:
+
+- `auth-server` (port 9000) — required by the OAuth2 resource server
+- `busybox` sidecar — polls the auth-server readiness every 10s and prints the health status
+
+### Verify
+
+- Swagger UI: http://localhost:8082/swagger-ui/index.html
+- OpenAPI json: http://localhost:8082/v3/api-docs
+- h2 console: http://localhost:8088
+- auth-server readiness: http://localhost:9000/actuator/health/readiness
+
+### Stop / clean up
+
+```shell
+docker compose down      # stop and remove containers
+docker compose down -v   # additionally remove volumes
+```
 
 ## Project Structure:
 
 `pom.xml`: This is your main Maven configuration file. It manages dependencies, plugins, and build settings.
 `src` Directory: Contains your main Java source code and resources, as well as test code.
 `restRequests` Directory: Houses resources for REST requests, including authentication HTTP requests and HTTP client configurations.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  subgraph Client
+    HTTP[HTTP Client]
+  end
+
+  subgraph Security
+    OAuth2[OAuth2 Resource Server<br/>JWT / scope validation]
+  end
+
+  subgraph API["Spring WebFlux (port 8082)"]
+    Beer[BeerController<br/>/api/v2/beer]
+    Customer[CustomerController<br/>/api/v2/customer]
+    Actuator[Actuator Endpoints<br/>/actuator/*]
+    OpenAPI[OpenAPI / Swagger UI]
+  end
+
+  subgraph Service
+    BeerService[BeerService]
+    CustomerService[CustomerService]
+    Mapper[MapStruct Mappers]
+  end
+
+  subgraph Data["R2DBC / H2 (in-memory)"]
+    Schema[schema.sql]
+    Bootstrap[BootstrapData<br/>3 beers + 4 customers]
+    BeerRepo[BeerRepository]
+    CustomerRepo[CustomerRepository]
+    DB[(H2 Database)]
+  end
+
+  HTTP --> OAuth2
+  OAuth2 --> API
+  Beer --> BeerService
+  Customer --> CustomerService
+  BeerService --> Mapper
+  CustomerService --> Mapper
+  Mapper --> BeerRepo
+  Mapper --> CustomerRepo
+  BeerRepo --> DB
+  CustomerRepo --> DB
+  Schema --> DB
+  Bootstrap --> DB
+```
 
 ## Urls
 
