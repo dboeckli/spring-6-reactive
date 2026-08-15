@@ -21,6 +21,18 @@
 
 Build order: `validate` (format) → `compile` → `test` (surefire, *Test) → `verify` (failsafe, *IT) → `install` (docker image + helm package). CI runs `mvn -B -e deploy`.
 
+After changing code, always verify: run the relevant Maven goal above and report its output (evidence, not just "done").
+
+## Sandbox build quirk (required)
+
+This sandbox mounts the repo via filesystem passthrough, which blocks symlinks. Spotless's `npm install` (prettier) therefore fails with `EPERM` unless npm skips bin links:
+
+```bash
+export npm_config_bin_links=false    # export BEFORE running ./mvnw
+```
+
+Without it, `./mvnw validate` / `./mvnw verify` fail in the spotless step. On a normal host (Windows/CI) this is not needed.
+
 ## Test quirks
 
 - Tests use `@ActiveProfiles("test")` — in-memory H2 via R2DBC, no auth-server needed.
@@ -64,3 +76,4 @@ Renovate + Dependabot both run:
 - `maven-build.yml`: build → SonarCloud → deploy trigger.
 - `release.yml`: `mvn release:prepare release:perform` (main/master only, must be SNAPSHOT).
 - CI profile `ci-cd` auto-activates via `env.GITHUB_ACTIONS=true`.
+

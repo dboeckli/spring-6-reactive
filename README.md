@@ -30,6 +30,12 @@ Start a new sandbox:
 sbx run opencode --name spring-6-reactive --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git" "C:\development\projects\spring-6-reactive"
 ```
 
+Start the sandbox with Kubernetes support:
+
+```powershell
+sbx run opencode --name spring-6-reactive --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git" "C:\development\projects\spring-6-reactive" "$env:USERPROFILE\.kube:ro"
+```
+
 Apply the kit to an existing sandbox (restarts the sandbox, VM state is kept):
 
 ```powershell
