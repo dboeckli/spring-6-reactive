@@ -10,21 +10,23 @@ The auth-server starts automatically via Docker Compose (`compose.yaml`) because
 
 Use the checked-in IntelliJ run configuration `.run/Spring6ReactiveApplication.run.xml` to start the app locally (no manual setup required).
 
-## Sandbox (local dev environment)
+## Sandbox
 
 The sandbox consists of the app (Spring Boot, port 8082) plus an auth-server (port 9000) provided by Docker Compose. The auth-server starts automatically via `spring.docker.compose.enabled=true` when the app boots, so usually one step is enough.
 
-### Start the sandbox (opencode-sandbox-kit)
-
-The sandbox is provisioned by the opencode-sandbox-kit and runs as a Docker container. It mounts this repo, starts opencode, and connects the IntelliJ MCP server.
-
-Allow the kit source (GitHub without cloning):
+Initial setup (one-time, allow sandbox kit sources):
 
 ```powershell
 sbx settings set kit.allowedSources --% "[\"docker.io/\",\"github.com/dboeckli/\"]"
 ```
 
-Start a new sandbox:
+Add the sandbox kit:
+
+```powershell
+sbx kit add git+https://github.com/dboeckli/opencode-sandbox-kit.git
+```
+
+Start the sandbox (usually from PowerShell):
 
 ```powershell
 sbx run opencode --name spring-6-reactive --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git" "C:\development\projects\spring-6-reactive"
@@ -36,10 +38,16 @@ Start the sandbox with Kubernetes support:
 sbx run opencode --name spring-6-reactive --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git" "C:\development\projects\spring-6-reactive" "$env:USERPROFILE\.kube:ro"
 ```
 
-Apply the kit to an existing sandbox (restarts the sandbox, VM state is kept):
+Start the sandbox from WSL:
+
+```bash
+opencode --name spring-6-reactive --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git" "/mnt/c/development/projects/spring-6-reactive"
+```
+
+Remove the sandbox:
 
 ```powershell
-sbx kit add spring-6-reactive "git+https://github.com/dboeckli/opencode-sandbox-kit.git"
+sbx remove spring-6-reactive
 ```
 
 ### Start the app
