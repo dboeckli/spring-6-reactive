@@ -23,25 +23,25 @@ sbx settings set kit.allowedSources --% "[\"docker.io/\",\"github.com/dboeckli/\
 Add the sandbox kit:
 
 ```powershell
-sbx kit add git+https://github.com/dboeckli/opencode-sandbox-kit.git
+sbx kit add git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent
 ```
 
 Start the sandbox (usually from PowerShell):
 
 ```powershell
-sbx run opencode --name spring-6-reactive --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git" "C:\development\projects\spring-6-reactive"
+sbx run opencode --name spring-6-reactive --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" "C:\development\projects\spring-6-reactive"
 ```
 
 Start the sandbox with Kubernetes support:
 
 ```powershell
-sbx run opencode --name spring-6-reactive --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git" "C:\development\projects\spring-6-reactive" "$env:USERPROFILE\.kube:ro"
+sbx run opencode --name spring-6-reactive --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" "C:\development\projects\spring-6-reactive" "$env:USERPROFILE\.kube:ro"
 ```
 
 Start the sandbox from WSL:
 
 ```bash
-opencode --name spring-6-reactive --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git" "/mnt/c/development/projects/spring-6-reactive"
+opencode --name spring-6-reactive --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" "/mnt/c/development/projects/spring-6-reactive"
 ```
 
 Remove the sandbox:
