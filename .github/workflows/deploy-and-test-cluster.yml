@@ -108,18 +108,19 @@ jobs:
           
           echo "::group::Helm Test Raw Output"
           echo "Testing Application $APPLICATION_NAME: $APP_VERSION"
+          # Short settle window: right after the single replica becomes Ready there is a
+          # small endpoint/kube-proxy propagation gap that can cause a transient
+          # "connection refused" from the Service ClusterIP (see issue #129).
+          sleep 10
           TEST_OUTPUT=$(helm test $APPLICATION_NAME --namespace ${NAMESPACE} --logs)
           TEST_EXIT_CODE=$?
-          echo "Exit Code: $TEST_EXIT_CODE"
           echo "$TEST_OUTPUT"
           echo "::endgroup::"
-          
-          # Check all test exit codes
-          if echo "$TEST_OUTPUT" | grep -q "Exit code: [^0]"; then
-            echo "::error::One or more Helm tests failed. See details above:"
-            exit 1
-          elif [ $TEST_EXIT_CODE -ne 0 ]; then
-            echo "::error::Helm test command failed with exit code $TEST_EXIT_CODE"
+
+          # helm test returns non-zero if any test hook pod failed. The test hook pod now
+          # exits with the health-check result (see chart template tests/test-connection.yaml).
+          if [ $TEST_EXIT_CODE -ne 0 ]; then
+            echo "::error::Helm tests failed with exit code $TEST_EXIT_CODE. See details above:"
             exit $TEST_EXIT_CODE
           else
             echo "All Helm tests passed successfully."

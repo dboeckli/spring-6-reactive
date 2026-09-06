@@ -17,19 +17,28 @@ spec:
         - |
           ERROR_OCCURED=0
 
-          echo "### Test 1: Checking health endpoint using service short name: {{ include "application-template.fullname" . }}"
-          wget -O- -q {{ include "application-template.fullname" . }}:{{ .Values.service.port }}/actuator/health
-          echo "Exit code: $?"
-          if [ $? -ne 0 ]; then
-            ERROR_OCCURED=1
-          fi
+          check_health() {
+            ENDPOINT="$1"
+            LABEL="$2"
+            rc=1
+            echo "### Test: $LABEL"
+            for attempt in 1 2 3 4 5; do
+              wget -O- -q "$ENDPOINT"
+              rc=$?
+              if [ $rc -eq 0 ]; then
+                break
+              fi
+              echo "Attempt $attempt of 5 failed (exit code: $rc) - waiting 2s before retry"
+              sleep 2
+            done
+            echo "Exit code: $rc"
+            if [ $rc -ne 0 ]; then
+              ERROR_OCCURED=1
+            fi
+          }
 
-          echo "### Test 2: Checking health endpoint using fully qualified domain name (FQDN): {{ include "application-template.serviceFQDN" . }}"
-          wget -O- -q {{ include "application-template.serviceFQDN" . }}:{{ .Values.service.port }}/actuator/health
-          echo "Exit code: $?"
-          if [ $? -ne 0 ]; then
-            ERROR_OCCURED=1
-          fi
+          check_health "{{ include "application-template.fullname" . }}:{{ .Values.service.port }}/actuator/health" "Checking health endpoint using service short name: {{ include "application-template.fullname" . }}"
+          check_health "{{ include "application-template.serviceFQDN" . }}:{{ .Values.service.port }}/actuator/health" "Checking health endpoint using fully qualified domain name (FQDN): {{ include "application-template.serviceFQDN" . }}"
 
           if [ $ERROR_OCCURED -ne 0 ]; then
             # Print DNS configuration
@@ -42,5 +51,7 @@ spec:
             echo "nslookup AP_FQDN: $AP_FQDN"
             nslookup $AP_FQDN
           fi
+
+          exit $ERROR_OCCURED
 
   restartPolicy: Never
