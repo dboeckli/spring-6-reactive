@@ -29,22 +29,24 @@ sbx kit add git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencod
 Start the sandbox (usually from PowerShell):
 
 ```powershell
-sbx run opencode --name spring-6-reactive `
-    --static-mcp idea `
+sbx run opencode `
     --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    -t docker/sandbox-templates:opencode-docker-0.5.0 `
-    "C:\development\projects\spring-6-reactive" `
+    --template docker/sandbox-templates:opencode-docker-0.5.0 `
+    --no-share-skills `
+    --static-mcp idea `
+    . `
     "C:\development\maven-repo:ro"
 ```
 
 Start the sandbox with Kubernetes support:
 
 ```powershell
-sbx run opencode --name spring-6-reactive `
-    --static-mcp idea `
+sbx run opencode `
     --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    -t docker/sandbox-templates:opencode-docker-0.5.0 `
-    "C:\development\projects\spring-6-reactive" `
+    --template docker/sandbox-templates:opencode-docker-0.5.0 `
+    --no-share-skills `
+    --static-mcp idea `
+    . `
     "$env:USERPROFILE\.kube:ro" `
     "C:\development\maven-repo:ro"
 ```
@@ -52,13 +54,18 @@ sbx run opencode --name spring-6-reactive `
 Start the sandbox from WSL:
 
 ```bash
-opencode --name spring-6-reactive --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" "/mnt/c/development/projects/spring-6-reactive"
+sbx run opencode \
+    --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" \
+    --template docker/sandbox-templates:opencode-docker-0.5.0 \
+    --no-share-skills \
+    --static-mcp idea \
+    .
 ```
 
 Remove the sandbox:
 
 ```powershell
-sbx remove spring-6-reactive
+sbx remove <sandbox-name>
 ```
 
 ### Start the app
