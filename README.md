@@ -20,12 +20,6 @@ Initial setup (one-time, allow sandbox kit sources):
 sbx settings set kit.allowedSources --% "[\"docker.io/\",\"github.com/dboeckli/\"]"
 ```
 
-Add the sandbox kit:
-
-```powershell
-sbx kit add <sandbox-name> "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent"
-```
-
 Start the sandbox (usually from PowerShell):
 
 ```powershell
@@ -60,6 +54,12 @@ sbx run opencode \
     --skills=off \
     --static-mcp idea \
     .
+```
+
+Apply the kit to an existing sandbox (restarts the sandbox, VM state is kept):
+
+```powershell
+sbx kit add opencode-spring-6-reactive "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent"
 ```
 
 Remove the sandbox:
