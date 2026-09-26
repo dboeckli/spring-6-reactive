@@ -23,7 +23,7 @@ sbx settings set kit.allowedSources --% "[\"docker.io/\",\"github.com/dboeckli/\
 Add the sandbox kit:
 
 ```powershell
-sbx kit add git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent
+sbx kit add <sandbox-name> "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent"
 ```
 
 Start the sandbox (usually from PowerShell):
