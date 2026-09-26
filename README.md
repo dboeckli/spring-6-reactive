@@ -31,8 +31,8 @@ Start the sandbox (usually from PowerShell):
 ```powershell
 sbx run opencode `
     --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    --template docker/sandbox-templates:opencode-docker-0.5.0 `
-    --no-share-skills `
+    --template docker.io/domboeckli/sbx-opencode-tooling:latest `
+    --skills=off `
     --static-mcp idea `
     . `
     "C:\development\maven-repo:ro"
@@ -43,8 +43,8 @@ Start the sandbox with Kubernetes support:
 ```powershell
 sbx run opencode `
     --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    --template docker/sandbox-templates:opencode-docker-0.5.0 `
-    --no-share-skills `
+    --template docker.io/domboeckli/sbx-opencode-tooling:latest `
+    --skills=off `
     --static-mcp idea `
     . `
     "$env:USERPROFILE\.kube:ro" `
@@ -56,8 +56,8 @@ Start the sandbox from WSL:
 ```bash
 sbx run opencode \
     --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" \
-    --template docker/sandbox-templates:opencode-docker-0.5.0 \
-    --no-share-skills \
+    --template docker.io/domboeckli/sbx-opencode-tooling:latest \
+    --skills=off \
     --static-mcp idea \
     .
 ```
