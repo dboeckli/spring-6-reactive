@@ -65,7 +65,7 @@ sbx kit add opencode-spring-6-reactive "git+https://github.com/dboeckli/opencode
 Remove the sandbox:
 
 ```powershell
-sbx remove <sandbox-name>
+sbx remove opencode-spring-6-reactive
 ```
 
 ### Start the app
