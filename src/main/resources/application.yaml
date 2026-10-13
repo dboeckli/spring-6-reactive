@@ -129,3 +129,10 @@ security:
       - http://localhost:30080 # gateway project runs on port 30080
       - http://127.0.0.1:30080 # gateway project runs on port 30080
 
+appconfig:
+  request-logging:
+    # set to false to remove the request logging filter from the chain entirely
+    enabled: true
+    # request URI prefixes that are not logged
+    exclude-paths:
+      - /actuator/health
