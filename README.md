@@ -99,7 +99,9 @@ docker compose down -v   # additionally remove volumes
 
 `pom.xml`: This is your main Maven configuration file. It manages dependencies, plugins, and build settings.
 `src` Directory: Contains your main Java source code and resources, as well as test code.
-`restRequests` Directory: Houses resources for REST requests, including authentication HTTP requests and HTTP client configurations.
+`restRequests` Directory: Houses resources for REST requests, including authentication HTTP requests, HTTP client
+configurations and documented request flows (`*-flow-*` directories with `.http` and `.md` files; shared pre-request
+scripts in `scripts/`).
 
 ## Architecture
 

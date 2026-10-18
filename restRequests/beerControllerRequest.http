@@ -1,34 +1,11 @@
-### List Beers
-GET http://localhost:{{application-port}}/api/v2/beer
-Accept: application/json
-Content-Type: application/json
-Authorization: Bearer {{$auth.token("auth-id")}}
-
-### Get Beer by ID
-GET http://localhost:{{application-port}}/api/v2/beer/1
-Accept: application/json
-Content-Type: application/json
-Authorization: Bearer {{$auth.token("auth-id")}}
-
-### Create Beer
-POST http://localhost:{{application-port}}/api/v2/beer
-Accept: application/json
-Authorization: Bearer {{$auth.token("auth-id")}}
-Content-Type: application/json
-
-{
-    "beerName": "presidente",
-    "beerStyle": "LAGER",
-    "upc": "xx",
-    "quantityOnHand": 5,
-    "price": 27.16
-}
-
 ### Create Beer returns BAD REQUEST, beerName is to short
+< scripts/traceparent.js
 POST http://localhost:{{application-port}}/api/v2/beer
 Accept: application/json
 Authorization: Bearer {{$auth.token("auth-id")}}
 Content-Type: application/json
+traceparent: 00-{{traceId}}-{{spanId}}-03
+baggage: testBaggage=spring-6-reactive
 
 {
     "beerName": "p",
@@ -38,25 +15,14 @@ Content-Type: application/json
     "price": 27.16
 }
 
-### Update Beer by ID
-PUT http://localhost:{{application-port}}/api/v2/beer/1
-Accept: application/json
-Authorization: Bearer {{$auth.token("auth-id")}}
-Content-Type: application/json
-
-{
-    "beerName": "presidenteEdited",
-    "beerStyle": "LAGER",
-    "upc": "xx",
-    "quantityOnHand": 5,
-    "price": 27.16
-}
-
 ### Update Beer by ID returns BAD REQUEST, beerStyle is empty
+< scripts/traceparent.js
 PUT http://localhost:{{application-port}}/api/v2/beer/1
 Accept: application/json
 Authorization: Bearer {{$auth.token("auth-id")}}
 Content-Type: application/json
+traceparent: 00-{{traceId}}-{{spanId}}-03
+baggage: testBaggage=spring-6-reactive
 
 {
     "beerName": "presidenteEdited",
@@ -66,25 +32,14 @@ Content-Type: application/json
     "price": 27.16
 }
 
-### Patch Beer by ID
-PUT http://localhost:{{application-port}}/api/v2/beer/1
+### Patch Beer by ID returns BAD REQUEST, beerName is missing
+< scripts/traceparent.js
+PATCH http://localhost:{{application-port}}/api/v2/beer/1
 Accept: application/json
 Authorization: Bearer {{$auth.token("auth-id")}}
 Content-Type: application/json
-
-{
-    "beerName": "presidentePatched",
-    "beerStyle": "LAGER",
-    "upc": "xx",
-    "quantityOnHand": 5,
-    "price": 27.16
-}
-
-### Patch Beer by ID. Beername is missing
-PUT http://localhost:{{application-port}}/api/v2/beer/1
-Accept: application/json
-Authorization: Bearer {{$auth.token("auth-id")}}
-Content-Type: application/json
+traceparent: 00-{{traceId}}-{{spanId}}-03
+baggage: testBaggage=spring-6-reactive
 
 {
     "beerStyle": "LAGER",
@@ -92,8 +47,3 @@ Content-Type: application/json
     "quantityOnHand": 5,
     "price": 27.16
 }
-
-### Delete Beer by ID
-DELETE http://localhost:{{application-port}}/api/v2/beer/1
-Accept: application/json
-Authorization: Bearer {{$auth.token("auth-id")}}
