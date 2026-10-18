@@ -1,9 +1,90 @@
 # Spring 6 Reactive
 
-Welcome to the "Spring Framework 6: Beginner to Guru" project! This project is designed to help you explore and understand the latest features of Spring Framework 6 through practical code examples.
-Here's a quick guide to get you started and contributing:
+## Abstract
 
-## Getting Started:
+`spring-6-reactive` is a reactive REST API for managing beers and customers, built to explore Spring Framework 6 and
+Spring Boot 4 with Java 25. It combines Spring WebFlux (`Mono`/`Flux`) with R2DBC and an in-memory H2 database, secures
+the API as an OAuth2 JWT resource server with scope-based authorization, and maps DTOs and entities with MapStruct.
+The application ships with OpenAPI/Swagger UI, Actuator metrics, bootstrap data, Kubernetes/Helm deployment assets, and
+documented IntelliJ HTTP request flows for the beer and customer endpoints.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  subgraph Client
+    HTTP[HTTP Client]
+  end
+
+  subgraph Auth["Auth Server (Docker, port 9000)"]
+    AuthServer[Spring Authorization Server<br/>OAuth2 token endpoint<br/>/oauth2/token]
+  end
+
+  subgraph Security
+    OAuth2[OAuth2 Resource Server<br/>JWT / scope validation]
+  end
+
+  subgraph API["Spring WebFlux (port 8082)"]
+    Beer[BeerController<br/>/api/v2/beer]
+    Customer[CustomerController<br/>/api/v2/customer]
+    Actuator[Actuator Endpoints<br/>/actuator/*]
+    OpenAPI[OpenAPI / Swagger UI]
+  end
+
+  subgraph Service
+    BeerService[BeerService]
+    CustomerService[CustomerService]
+    Mapper[MapStruct Mappers]
+  end
+
+  subgraph Data["R2DBC / H2 (in-memory)"]
+    Schema[schema.sql]
+    Bootstrap[BootstrapData<br/>3 beers + 4 customers]
+    BeerRepo[BeerRepository]
+    CustomerRepo[CustomerRepository]
+    DB[(H2 Database)]
+  end
+
+  HTTP -->|"client credentials"| AuthServer
+  HTTP -->|"Bearer JWT"| OAuth2
+  OAuth2 -->|"validate JWT / JWKS"| AuthServer
+  OAuth2 --> API
+  Beer --> BeerService
+  Customer --> CustomerService
+  BeerService --> Mapper
+  CustomerService --> Mapper
+  Mapper --> BeerRepo
+  Mapper --> CustomerRepo
+  BeerRepo --> DB
+  CustomerRepo --> DB
+  Schema --> DB
+  Bootstrap --> DB
+```
+
+## Database Schema
+
+```mermaid
+erDiagram
+    beer {
+        INTEGER      id PK
+        VARCHAR(255) beer_name
+        VARCHAR(255) beer_style
+        VARCHAR(25)  upc
+        INTEGER      quantity_on_hand
+        DECIMAL      price
+        TIMESTAMP    created_date
+        TIMESTAMP    last_modified_date
+    }
+
+    customer {
+        INTEGER      id PK
+        VARCHAR(255) customer_name
+        TIMESTAMP    created_date
+        TIMESTAMP    last_modified_date
+    }
+```
+
+## Getting Started
 
 Server runs on port 8082/30082. Requires the auth server running on port 9000/30900.
 The auth-server starts automatically via Docker Compose (`compose.yaml`) because `spring.docker.compose.enabled=true` in application.yaml.
@@ -25,41 +106,11 @@ Start the sandbox (usually from PowerShell):
 ```powershell
 sbx run opencode `
     --kit "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    --template docker.cloudsmith.io/dboeckli/sbx/sbx-opencode-tooling:latest `
+    --template docker.io/domboeckli/sbx-opencode-tooling:latest `
     --skills=off `
-    --static-mcp idea `
+    --static-mcp idea,k8s,docker `
     . `
     "C:\development\maven-repo:ro"
-```
-
-Start the sandbox with Kubernetes support:
-
-```powershell
-sbx run opencode `
-    --kit "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    --template docker.cloudsmith.io/dboeckli/sbx/sbx-opencode-tooling:latest `
-    --skills=off `
-    --static-mcp idea `
-    . `
-    "$env:USERPROFILE\.kube:ro" `
-    "C:\development\maven-repo:ro"
-```
-
-Start the sandbox from WSL:
-
-```bash
-sbx run opencode \
-    --kit "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" \
-    --template docker.cloudsmith.io/dboeckli/sbx/sbx-opencode-tooling:latest \
-    --skills=off \
-    --static-mcp idea \
-    .
-```
-
-Apply the kit to an existing sandbox (restarts the sandbox, VM state is kept):
-
-```powershell
-sbx kit add opencode-spring-6-reactive "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent"
 ```
 
 Remove the sandbox:
@@ -99,54 +150,9 @@ docker compose down -v   # additionally remove volumes
 
 `pom.xml`: This is your main Maven configuration file. It manages dependencies, plugins, and build settings.
 `src` Directory: Contains your main Java source code and resources, as well as test code.
-`restRequests` Directory: Houses resources for REST requests, including authentication HTTP requests and HTTP client configurations.
-
-## Architecture
-
-```mermaid
-flowchart LR
-  subgraph Client
-    HTTP[HTTP Client]
-  end
-
-  subgraph Security
-    OAuth2[OAuth2 Resource Server<br/>JWT / scope validation]
-  end
-
-  subgraph API["Spring WebFlux (port 8082)"]
-    Beer[BeerController<br/>/api/v2/beer]
-    Customer[CustomerController<br/>/api/v2/customer]
-    Actuator[Actuator Endpoints<br/>/actuator/*]
-    OpenAPI[OpenAPI / Swagger UI]
-  end
-
-  subgraph Service
-    BeerService[BeerService]
-    CustomerService[CustomerService]
-    Mapper[MapStruct Mappers]
-  end
-
-  subgraph Data["R2DBC / H2 (in-memory)"]
-    Schema[schema.sql]
-    Bootstrap[BootstrapData<br/>3 beers + 4 customers]
-    BeerRepo[BeerRepository]
-    CustomerRepo[CustomerRepository]
-    DB[(H2 Database)]
-  end
-
-  HTTP --> OAuth2
-  OAuth2 --> API
-  Beer --> BeerService
-  Customer --> CustomerService
-  BeerService --> Mapper
-  CustomerService --> Mapper
-  Mapper --> BeerRepo
-  Mapper --> CustomerRepo
-  BeerRepo --> DB
-  CustomerRepo --> DB
-  Schema --> DB
-  Bootstrap --> DB
-```
+`restRequests` Directory: Houses resources for REST requests, including authentication HTTP requests, HTTP client
+configurations and documented request flows (`*-flow-*` directories with `.http` and `.md` files; shared pre-request
+scripts in `scripts/`).
 
 ## Urls
 
