@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import reactor.test.StepVerifier;
 
 class SecurityConfigTest {
 
@@ -15,7 +14,7 @@ class SecurityConfigTest {
 
         ReactiveJwtDecoder jwtDecoder = securityConfig.jwtDecoder(WebClient.builder(), "http://localhost:1/issuer");
 
-        assertThatThrownBy(() -> jwtDecoder.decode("invalid-token").block()).isInstanceOf(JwtException.class);
+        StepVerifier.create(jwtDecoder.decode("invalid-token")).expectError(JwtException.class).verify();
     }
 
 }
