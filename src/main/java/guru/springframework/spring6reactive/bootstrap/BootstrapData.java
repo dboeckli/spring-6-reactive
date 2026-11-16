@@ -12,11 +12,14 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Log
 @RequiredArgsConstructor
 @Component
 public class BootstrapData implements CommandLineRunner {
+
+    private static final ZoneId ZONE_ID = ZoneId.systemDefault();
 
     private final BeerRepository beerRepository;
 
@@ -41,26 +44,26 @@ public class BootstrapData implements CommandLineRunner {
             if (count == 0) {
                 Customer customer1 = Customer.builder()
                     .customerName("Hans")
-                    .createdDate(LocalDateTime.now())
-                    .lastModifiedDate(LocalDateTime.now())
+                    .createdDate(LocalDateTime.now(ZONE_ID))
+                    .lastModifiedDate(LocalDateTime.now(ZONE_ID))
                     .build();
 
                 Customer customer2 = Customer.builder()
                     .customerName("Fritz")
-                    .createdDate(LocalDateTime.now())
-                    .lastModifiedDate(LocalDateTime.now())
+                    .createdDate(LocalDateTime.now(ZONE_ID))
+                    .lastModifiedDate(LocalDateTime.now(ZONE_ID))
                     .build();
 
                 Customer customer3 = Customer.builder()
                     .customerName("Peter")
-                    .createdDate(LocalDateTime.now())
-                    .lastModifiedDate(LocalDateTime.now())
+                    .createdDate(LocalDateTime.now(ZONE_ID))
+                    .lastModifiedDate(LocalDateTime.now(ZONE_ID))
                     .build();
 
                 Customer customer4 = Customer.builder()
                     .customerName("Pumukel")
-                    .createdDate(LocalDateTime.now())
-                    .lastModifiedDate(LocalDateTime.now())
+                    .createdDate(LocalDateTime.now(ZONE_ID))
+                    .lastModifiedDate(LocalDateTime.now(ZONE_ID))
                     .build();
 
                 customerRepository.save(customer1).subscribe();
@@ -80,8 +83,8 @@ public class BootstrapData implements CommandLineRunner {
                     .upc("12356")
                     .price(new BigDecimal("12.99"))
                     .quantityOnHand(122)
-                    .createdDate(LocalDateTime.now())
-                    .lastModifiedDate(LocalDateTime.now())
+                    .createdDate(LocalDateTime.now(ZONE_ID))
+                    .lastModifiedDate(LocalDateTime.now(ZONE_ID))
                     .build();
 
                 Beer beer2 = Beer.builder()
@@ -90,8 +93,8 @@ public class BootstrapData implements CommandLineRunner {
                     .upc("12356222")
                     .price(new BigDecimal("11.99"))
                     .quantityOnHand(392)
-                    .createdDate(LocalDateTime.now())
-                    .lastModifiedDate(LocalDateTime.now())
+                    .createdDate(LocalDateTime.now(ZONE_ID))
+                    .lastModifiedDate(LocalDateTime.now(ZONE_ID))
                     .build();
 
                 Beer beer3 = Beer.builder()
@@ -100,8 +103,8 @@ public class BootstrapData implements CommandLineRunner {
                     .upc("12356")
                     .price(new BigDecimal("13.99"))
                     .quantityOnHand(144)
-                    .createdDate(LocalDateTime.now())
-                    .lastModifiedDate(LocalDateTime.now())
+                    .createdDate(LocalDateTime.now(ZONE_ID))
+                    .lastModifiedDate(LocalDateTime.now(ZONE_ID))
                     .build();
 
                 beerRepository.save(beer1).subscribe();
