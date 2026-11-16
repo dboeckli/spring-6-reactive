@@ -34,3 +34,7 @@ build/
 
 ### Review ###
 .review/
+
+### Bruno ###
+node_modules/
+bru-reports/
